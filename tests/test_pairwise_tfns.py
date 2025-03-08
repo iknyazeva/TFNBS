@@ -260,3 +260,26 @@ class TestBasicStats(TestCase):
 
         self.assertLess(p_vals_tf["g2>g1"][np.triu_indices(10, k=1)].mean(),
                         p_vals_orig["g2>g1"][np.triu_indices(10, k=1)].mean())
+
+
+class TestRealExample(TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        from scipy.io import loadmat
+        path_to_data = '../examples/02_BLOCK_VAR_HRF_SNR05_CORRDIFF/'
+        taskB = loadmat(path_to_data + 'Task_B.mat')['corrdiff_TaskB']
+        taskA = loadmat(path_to_data + 'Task_A.mat')['corrdiff_TaskA']
+        taskB = fisher_r_to_z(np.nan_to_num(taskB, posinf=0, neginf=0))
+        taskA = fisher_r_to_z(np.nan_to_num(taskA, posinf=0, neginf=0))
+        cls.taskA = taskA
+        cls.taskB = taskB
+
+    def test_compute_p_val(self):
+        n_permutations = 10
+        p_vals_orig = compute_p_val(self.taskA,
+                                    self.taskB,
+                                    n_permutations=n_permutations,
+                                    paired=True,
+                                    tf=False,
+                                    use_mp=True)
+        self.assertEqual(0,0)

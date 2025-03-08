@@ -1,6 +1,7 @@
 import unittest
 from unittest import TestCase
 import numpy as np
+from bnetdiff.pairwise_tfns import compute_t_stat, compute_t_stat_diff
 from bnetdiff.tfnos import get_tfce_score, get_tfce_score_scipy, get_tfce_score_edge_reduction
 from bnetdiff.datasets import generate_fc_matrices
 from bnetdiff.utils import fisher_r_to_z
@@ -66,7 +67,7 @@ class TestTFNOS(TestCase):
         """
         statsmat = self.small_matrix
         result_nx = get_tfce_score(statsmat, 1, 1, 2)
-        result = get_tfce_score_scipy(statsmat, 1, 1, 2)
+        result = get_tfce_score_scipy(statsmat, 1, 1, 2, start_thres=0)
 
         # Expected output (manually calculated)
         expected = np.array([[0.0, 3.0, 7.0], [3.0, 0.0, 3.0], [7.0, 3.0, 0.0]])
@@ -76,7 +77,7 @@ class TestTFNOS(TestCase):
     def test_small_matrix_edge_reduction(self):
         statsmat = self.small_matrix
         result_edge = get_tfce_score_edge_reduction(statsmat, 1, 1, 2)
-        result = get_tfce_score_scipy(statsmat, 1, 1, 2)
+        result = get_tfce_score_scipy(statsmat, 1, 1, 2, start_thres=0)
 
         # Expected output (manually calculated)
         expected = np.array([[0.0, 3.0, 7.0], [3.0, 0.0, 3.0], [7.0, 3.0, 0.0]])
@@ -106,20 +107,41 @@ class TestTFNOS(TestCase):
 
     def test_tfnos_real_matrix_30N(self):
         t_stat = self.fc_sim_30["t_stat"]
-        score_pos = get_tfce_score_scipy(t_stat, self.E, self.H, self.n)
-        score_neg = get_tfce_score_scipy(-t_stat, self.E, self.H, self.n)
+        score_pos = get_tfce_score_scipy(t_stat['g2>g1'], self.E, self.H, self.n, start_thres=1.7)
+        score_neg = get_tfce_score_scipy(t_stat['g1>g2'], self.E, self.H, self.n, start_thres=1.7)
 
         self.assertTrue((score_pos >= 0).all())
         self.assertTrue((score_neg >= 0).all())
 
     def test_time_consumption(self):
-        time_original = self.run_and_measure(get_tfce_score, self.fc_sim_100["t_stat"])
-        time_scipy = self.run_and_measure(get_tfce_score_scipy,self.fc_sim_100["t_stat"])
-        time_edge = self.run_and_measure(get_tfce_score_edge_reduction, self.fc_sim_100["t_stat"])
+        time_original = self.run_and_measure(get_tfce_score, self.fc_sim_100["t_stat"]['g2>g1'])
+        time_scipy = self.run_and_measure(get_tfce_score_scipy,self.fc_sim_100["t_stat"]['g2>g1'])
+        time_edge = self.run_and_measure(get_tfce_score_edge_reduction, self.fc_sim_100["t_stat"]['g2>g1'])
 
         self.assertLess(time_scipy, time_original)
         self.assertLess(time_scipy, time_edge)
 
+class TestTfnosReal(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        from scipy.io import loadmat
+        path_to_data = '../examples/02_BLOCK_VAR_HRF_SNR05_CORRDIFF/'
+        taskB = loadmat(path_to_data + 'Task_B.mat')['corrdiff_TaskB']
+        taskA = loadmat(path_to_data + 'Task_A.mat')['corrdiff_TaskA']
+        taskB = fisher_r_to_z(np.nan_to_num(taskB, posinf=0, neginf=0)).swapaxes(0, 2)
+        taskA = fisher_r_to_z(np.nan_to_num(taskA, posinf=0, neginf=0)).swapaxes(0, 2)
+        cls.taskA = taskA
+        cls.taskB = taskB
+        cls.t_stat = compute_t_stat_diff(taskA - taskB)
+
+
+    def test_tsnos_scipy(self):
+        t_stats = self.t_stat['g2>g1']
+        e, h, n = 0.4, 1, 10
+        tfnos = get_tfce_score_scipy(t_stats, e, h, n, start_thres=1.75)
+
+        self.assertTrue()
 
 class TestTFNosMultiPar(unittest.TestCase):
 
@@ -139,7 +161,7 @@ class TestTFNosMultiPar(unittest.TestCase):
                          "cov1": cov1.copy(), "cov2": cov2.copy()}
 
     def test_scipy_list_params(self):
-        statsmat = self.fc_sim_30["t_stat"]
+        statsmat = self.fc_sim_30["t_stat"]['g2>g1']
         result = get_tfce_score_scipy(statsmat, [0.4, 0.4], [1, 2], 10)
 
         self.assertTrue(result.shape[2] == 2)

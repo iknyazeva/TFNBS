@@ -312,7 +312,8 @@ def compute_t_stat_tfnos(group1: npt.NDArray[np.float64],
 def compute_t_stat_tfnos_diffs(diffs: npt.NDArray[np.float64],
                                e: Union[float, list[float]] = 0.4,
                                h: Union[float, list[float]] = 3,
-                               n: int = 10) -> Dict[str, npt.NDArray[np.float64]]:
+                               n: int = 10,
+                               start_thres: float = 1.65) -> Dict[str, npt.NDArray[np.float64]]:
     """
     Compute TFCE-enhanced t-statistics from difference matrices and return separate
     scores for positive (g2 > g1) and negative (g1 > g2) effects.
@@ -332,8 +333,8 @@ def compute_t_stat_tfnos_diffs(diffs: npt.NDArray[np.float64],
         - Uses TFCE transformation on Welch’s t-statistics.
     """
     t_stat_dict = compute_t_stat_diff(diffs)
-    score_pos = get_tfce_score_scipy(t_stat_dict["g2>g1"], e, h, n)
-    score_neg = get_tfce_score_scipy(t_stat_dict["g1>g2"], e, h, n)
+    score_pos = get_tfce_score_scipy(t_stat_dict["g2>g1"], e, h, n, start_thres=start_thres)
+    score_neg = get_tfce_score_scipy(t_stat_dict["g1>g2"], e, h, n, start_thres=start_thres)
     return {"g2>g1": score_pos, "g1>g2": score_neg}
 
 
@@ -403,6 +404,8 @@ def compute_t_stat_diff(diff: npt.NDArray[np.float64]) -> Dict[str, npt.NDArray[
     Notes:
         Uses sample standard deviation with ddof=1 for unbiased variance estimation.
     """
+
+    assert np.allclose(diff.mean(axis=0), diff.mean(axis=0).T, atol=1e-8), "Only symmetric differences are supported. Participants should be along 0 axis"
     n = diff.shape[0]
     if n < 2:
         raise ValueError("At least 2 samples required for t-statistic.")

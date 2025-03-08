@@ -48,7 +48,7 @@ def get_tfce_score(t_stats, e, h, n):
     return tfnos
 
 
-def get_tfce_score_scipy(t_stats, e, h, n):
+def get_tfce_score_scipy(t_stats, e, h, n, start_thres=1.65):
     """
     Transform the connectivity matrix using Threshold-Free Network-Oriented Statistics.
 
@@ -57,9 +57,11 @@ def get_tfce_score_scipy(t_stats, e, h, n):
         e (float or list of float): Extent exponent(s).
         h (float or list of float): Height exponent(s).
         n (int): Number of steps for cluster formation.
+        start_thres (float) : Threshold value (a scalar) start for integration
 
     Returns:
         np.ndarray: Transformed TFNOS scores with shape (N, N, len(e_list)).
+
     """
     if not np.all(np.diag(t_stats) == 0):
         raise ValueError("Diagonal elements of the connectivity matrix must be zero (no self-connections).")
@@ -83,10 +85,11 @@ def get_tfce_score_scipy(t_stats, e, h, n):
 
     # Compute thresholds
     max_stat = np.max(t_stats)
-    dh = max_stat / n
+    dh = (max_stat-start_thres) / n
     if dh == 0:
         return tfnos  # Return zero matrix if no variation
-    threshs = np.linspace(dh, max_stat, n)
+    #threshs = np.linspace(dh, max_stat, n)
+    threshs = np.linspace(start_thres, max_stat, n)
 
     # Reshape e and h for broadcasting (only if in multi-value mode)
     if not scalar_mode:
@@ -101,12 +104,12 @@ def get_tfce_score_scipy(t_stats, e, h, n):
 
         # Compute cluster sizes
         unique, counts = np.unique(labels, return_counts=True)
-        clustsize = np.zeros_like(t_stats, dtype=np.float64)
-
+        clustsize = 1.*mask.copy()
 
         for lbl, size in zip(unique, counts):
             if size >= 2:  # Ignore single-node clusters
-                clustsize[np.ix_(labels == lbl, labels == lbl)] = size
+                sz_links = np.sum(mask[np.ix_(labels == lbl, labels == lbl)]) / 2
+                clustsize[np.ix_(labels == lbl, labels == lbl)] *= sz_links
             # TFNOS accumulation
         np.fill_diagonal(clustsize, 0)
 
