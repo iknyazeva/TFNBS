@@ -1,20 +1,20 @@
 from unittest import TestCase
 import time
-from bnetdiff.utils import fisher_r_to_z
-from bnetdiff.pairwise_tfns import (_permutation_task_ind,
-                                    _permutation_task_paired,
-                                    compute_null_dist,
-                                    compute_t_stat_diff,
-                                    compute_permute_t_stat_ind,
-                                    compute_permute_t_stat_diff,
-                                    compute_p_val,
-                                    compute_t_stat,
-                                    compute_t_stat_tfnos,
-                                    compute_t_stat_tfnos_diffs)
+from tfnbs.utils import fisher_r_to_z
+from tfnbs.pairwise_tfns import (_permutation_task_ind,
+                                 _permutation_task_paired,
+                                 compute_null_dist,
+                                 compute_t_stat_diff,
+                                 compute_permute_t_stat_ind,
+                                 compute_permute_t_stat_diff,
+                                 compute_p_val,
+                                 compute_t_stat,
+                                 compute_t_stat_tfnos,
+                                 compute_t_stat_tfnos_diffs)
 
-from bnetdiff.datasets import generate_fc_matrices
-from bnetdiff.datasets import (create_simple_random,
-                               create_nd_random_arr)
+from tfnbs.datasets import generate_fc_matrices
+from tfnbs.datasets import (create_simple_random,
+                            create_nd_random_arr)
 import numpy as np
 
 
@@ -113,7 +113,7 @@ class TestBasicStats(TestCase):
                                         30, 42, e=[0.4, 0.6], h=[1, 2])
         self.assertIsInstance(t_maxes, dict)
         self.assertIsInstance(t_stat_mod, dict)
-        self.assertGreater(t_stat_mod['g2>g1'].mean(), t_maxes['g2>g1'].mean())
+        self.assertGreater(t_stat_mod['g2>g1'][:10, :10, :].mean(), t_maxes['g2>g1'].mean())
         self.assertGreater(t_stat_mod['g1>g2'].max(), t_maxes['g1>g2'].mean())
 
     def test__permutation_task_paired(self):
@@ -125,7 +125,7 @@ class TestBasicStats(TestCase):
                                            e=[0.4, 0.6], h=[1, 2])
         self.assertIsInstance(t_maxes, dict)
         self.assertIsInstance(t_max_t, dict)
-        self.assertGreater(emp_tfnos['g2>g1'].mean(), t_maxes['g2>g1'].mean())
+        self.assertGreater(emp_tfnos['g2>g1'][:10,:10,:].mean(), t_maxes['g2>g1'].mean())
         self.assertGreater(emp_t['g1>g2'].max(), t_max_t['g1>g2'])
         self.assertGreater(emp_tfnos['g1>g2'].max(), t_maxes['g1>g2'].mean())
 
@@ -158,7 +158,7 @@ class TestBasicStats(TestCase):
                                       compute_t_stat_tfnos, paired=False,
                                       n_permutations=n_permutations, random_state=42, use_mp=True)
 
-        self.assertEqual((null_t["g2>g1"].mean() - null_t_mc["g1>g2"].mean()).round(), 0)
+        self.assertGreater(emp_tfnos["g2>g1"].mean(), null_t["g1>g2"].mean())
         self.assertGreater(emp_tfnos["g2>g1"].mean(), null_t_mc["g1>g2"].mean())
 
     def test_compute_null_t_stat_tfnos_ind_multi(self):

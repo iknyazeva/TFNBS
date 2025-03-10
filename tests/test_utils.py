@@ -1,8 +1,8 @@
 from unittest import TestCase
-from bnetdiff.utils import binarize, get_components
-from bnetdiff.datasets import generate_fc_matrices
-from bnetdiff.utils import fisher_r_to_z
-from bnetdiff.pairwise_tfns import compute_t_stat, compute_t_stat_diff
+from tfnbs.utils import binarize, get_components
+from tfnbs.datasets import generate_fc_matrices
+from tfnbs.utils import fisher_r_to_z
+from tfnbs.pairwise_tfns import compute_t_stat, compute_t_stat_diff
 import matplotlib.pyplot as plt
 import numpy as np
 

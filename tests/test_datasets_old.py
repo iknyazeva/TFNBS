@@ -1,7 +1,7 @@
 from unittest import TestCase
-from bnetdiff.datasets import (create_mv_normal,
-                                         create_simple_random,
-                                         create_correlation_data)
+from tfnbs.datasets import (create_mv_normal,
+                            create_simple_random,
+                            create_correlation_data)
 import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use('Qt5Agg')  #

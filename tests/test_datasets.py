@@ -1,8 +1,8 @@
 from unittest import TestCase
-from bnetdiff.datasets import (create_mv_normal,
-                                         create_simple_random,
-                                         create_correlation_data,
-                                         generate_fc_matrices)
+from tfnbs.datasets import (create_mv_normal,
+                            create_simple_random,
+                            create_correlation_data,
+                            generate_fc_matrices)
 import matplotlib.pyplot as plt
 import numpy as np
 
