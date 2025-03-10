@@ -1,5 +1,4 @@
 import numpy as np
-import networkx as nx
 from scipy.sparse import csr_matrix
 from scipy.sparse.csgraph import connected_components
 
@@ -17,6 +16,14 @@ def get_tfce_score(t_stats, e, h, n, start_thres=1.65):
         numpy.ndarray: Transformed TFNOS scores.
     """
     # Input validation: Diagonal elements must be zero (no self-connections)
+
+    try:
+        import networkx as nx
+    except ImportError:
+        print(
+            "Error: networkx is required to use this function.  It should have been installed with the package, "
+            "but something went wrong.  Please try reinstalling the package or installing networkx manually.")
+
     if not np.all(np.diag(t_stats) == 0):
         raise ValueError("Diagonal elements of the connectivity matrix must be zero (no self-connections).")
 
