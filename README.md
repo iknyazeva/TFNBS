@@ -5,7 +5,7 @@ TFNBS - is a python package for computation of network based statistics for Neur
 
 Overview.png
 
-![Overview of TFNOS](Docs\Overview_TFNOS.png)
+![Overview of TFNOS](Docs/Overview_TFNOS.png)
 
 ## Installation 
 TFNOS library can be installed using: 
