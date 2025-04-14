@@ -11,10 +11,24 @@ def get_tfce_score(t_stats, e, h, n, start_thres=1.65):
         e (float ): Extent exponent (a scalar).
         h (float ): Height exponent (a scalar).
         n (int): Number of steps for cluster formation.
+        start_thres (float) : Threshold value (a scalar) start for integration
 
     Returns:
-        numpy.ndarray: Transformed TFNOS scores.
+        numpy.ndarray: Transformed TFNOS scores with shape (N, N, len(e_list))
+
+    >>> import numpy as np
+    >>> arr = np.array([[0, 1, 3], [1, 0, 1], [3, 1, 0]])
+    >>> result = get_tfce_score(arr, 1, 2, 3, start_thres=0)
+    >>> expected = np.array([[ 0., 3., 16.],[ 3., 0.,  3.],[16., 3.,  0.]])
+    >>> (result==expected).all()
+    True
+
+    >>> result = get_tfce_score(arr, [1,2], [2,3], 3, start_thres=0); result.shape
+    (3, 3, 2)
+
     """
+
+
     # Input validation: Diagonal elements must be zero (no self-connections)
 
     try:
@@ -94,7 +108,17 @@ def get_tfce_score_scipy(t_stats, e, h, n, start_thres=1.65):
     Returns:
         np.ndarray: Transformed TFNOS scores with shape (N, N, len(e_list)).
 
+    >>> import numpy as np
+    >>> arr = np.array([[0, 1, 3], [1, 0, 1], [3, 1, 0]])
+    >>> result = get_tfce_score_scipy(arr, 1, 2, 3, start_thres=0)
+    >>> expected = np.array([[ 0., 3., 16.],[ 3., 0.,  3.],[16., 3.,  0.]])
+    >>> (result==expected).all()
+    True
+
+    >>> result = get_tfce_score_scipy(arr, [1,2], [2,3], 3, start_thres=0); result.shape
+    (3, 3, 2)
     """
+    
     if not np.all(np.diag(t_stats) == 0):
         raise ValueError("Diagonal elements of the connectivity matrix must be zero (no self-connections).")
 

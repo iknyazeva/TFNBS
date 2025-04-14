@@ -29,6 +29,10 @@ def fisher_r_to_z(r: npt.NDArray[np.float64],
     Notes:
         The transformation is z = arctanh(r). For r = ±1, z approaches ±infinity.
         When handle_bounds=True, these are capped at ±max_z.
+
+    >>> is needed here?
+
+
     """
     # Convert input to numpy array and ensure float type
     r = np.asarray(r, dtype=np.float64)
@@ -102,6 +106,15 @@ def get_components(A, no_depend=False):
     matlab code, although the component topology is.
 
     Many thanks to Nick Cullen for providing this implementation
+
+
+    #import libs
+    # generate matrices  
+    # convert to z scores 
+    # compute -t stat difference
+    # using t stats, calculate adjoint matrix
+    # get_components 
+    # Check instances where compnent_size == 1
     '''
 
     if not np.all(A == A.T):  # ensure matrix is undirected
