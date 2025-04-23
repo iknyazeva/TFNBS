@@ -14,8 +14,12 @@ TFNOS library can be installed using:
 - pip install.....
 ```
 
-## Documentation
+Documentation available at ______
 
+## Modules 
+- get_TFCE_scores + scipy version 
+- t-test functions
+- generate_matrices
 
 ## Data 
 

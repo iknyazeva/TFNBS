@@ -22,8 +22,6 @@ def generate_fc_matrices(N,  effect_size, mask=None, n_samples_group1=50, n_samp
     - group1 (np.ndarray): (n_samples_group1, N, N) correlation matrices for group 1.
     - group2 (np.ndarray): (n_samples_group2, N, N) correlation matrices for group 2.
 
-    
-    >>> import numpy as np   
     >>> N = 6; e = 0.2; mask = np.zeros((N, N))
     >>> mask[0:2, 0:2] = 1; mask[2:4, 2:4] = -1
     >>> g1, g2, (c1,c2) = generate_fc_matrices(N, e, mask, 5, 10, seed = 0)
@@ -166,7 +164,6 @@ def create_correlation_data(n_rep: int,
                             mean: float = 3.,
                             sigma: float = 1.):
     """ Create functional connectivity matrices and add correlation between themn
-    
     Args:
         n_rep (int): Number of repeated measures
         dim1 (int): ROI dimension M

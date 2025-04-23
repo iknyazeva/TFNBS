@@ -32,13 +32,11 @@ def compute_p_val(group1: npt.NDArray[np.float64],
     Output: 
         p_values (np.ndarray): Computed p-values for given data
 
-
-    >>> import numpy as np
-    >>> group1 = np.random.rand(3, 3)
-    >>> group2 = np.random.rand(3, 3)
-    >>> p_vals = compute_p_val(group1, group2, n_permutations=10, paired=True, tf=False, random_state = 0)
-    >>> 
-    >>>
+    >>> group1 = np.random.rand(5, 3, 3); for arr in group1: np.fill_diagonal(arr,1)
+    >>> group2 = np.random.rand(8, 3, 3); for arr in group2: np.fill_diagonal(arr,1)
+    >>> p_vals = compute_p_val(group1, group2, n_permutations=10, paired=False, tf=False, random_state = 0)
+    >>> p_vals['g2>g1'].mean() < p_vals['g1>g2'].mean() 
+    True
     
     """
     if paired is True:
@@ -169,15 +167,12 @@ def compute_null_dist(group1: npt.NDArray[np.float64],
 
     Raises:
         ValueError: If shapes are incompatible, sample sizes are too small, or n_permutations < 1.
-
-    >>> import numpy as np
-    >>> from pairwise_tfns import compute_t_stat
+        
     >>> group1 = np.random.rand(3, 3)
     >>> group2 = np.random.rand(3, 3)
     >>> null_d = compute_null_dist(group1, group2, compute_t_stat)
     >>> isinstance(null_d, dict)
     True
-
 
     """
     # Validate inputs
@@ -313,6 +308,10 @@ def compute_permute_t_stat_ind(group1: npt.NDArray[np.float64],
 
 
 def compute_permute_t_stat_diff(diffs: npt.NDArray) -> tuple[float, float]:
+    """
+    Computes the maximum t-statistic for paired groups
+
+    """
     n_dims = len(diffs.shape) - 1
     faked_dims = [1] * n_dims
     perm_diffs = np.random.choice([1, -1], diffs.shape[0]).reshape(-1, *faked_dims) * diffs
@@ -346,14 +345,11 @@ def compute_t_stat_tfnos(group1: npt.NDArray[np.float64],
     Notes:
         - Uses TFCE transformation on Welch’s t-statistics.
 
-    >>> import numpy as np
     >>> group1 = np.random.rand(3, 3)
     >>> group2 = np.random.rand(3, 3)
     >>> np.fill_diagonal(group1, 0); np.fill_diagonal(group2, 0)
     >>> result = compute_t_stat_tfnos(group1, group2, 0, 0.4, 3, 100)
-    >>> # Check if upper triangle mean is less than size
-    >>> 
-    >>> 
+    >>> # Check if upper triangle mean is less than size - error here
                 
     """
     t_stat_dict = compute_t_stat(group1, group2, paired=paired)

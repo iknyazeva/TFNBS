@@ -30,7 +30,7 @@ def fisher_r_to_z(r: npt.NDArray[np.float64],
         The transformation is z = arctanh(r). For r = ±1, z approaches ±infinity.
         When handle_bounds=True, these are capped at ±max_z.
 
-    >>> is needed here?
+    >>> test is needed here?
 
 
     """
@@ -108,7 +108,6 @@ def get_components(A, no_depend=False):
     Many thanks to Nick Cullen for providing this implementation
 
 
-    #import libs
     # generate matrices  
     # convert to z scores 
     # compute -t stat difference
