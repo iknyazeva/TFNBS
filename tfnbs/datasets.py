@@ -11,8 +11,8 @@ def generate_fc_matrices(N,  effect_size, mask=None, n_samples_group1=50, n_samp
 
     Parameters:
     - N (int): Number of ROIs (regions of interest).
-    - mask (np.ndarray): Binary mask (N x N) indicating where differences should be applied.
     - effect_size (float): Magnitude of the difference applied in the masked regions.
+    - mask (np.ndarray): Binary mask (N x N) indicating where differences should be applied.
     - n_samples_group1 (int): Number of matrices in group 1 (default: 50).
     - n_samples_group2 (int): Number of matrices in group 2 (default: 50).
     - repeated_measures (bool): If True, generate within-subject repeated measures data.
@@ -21,6 +21,14 @@ def generate_fc_matrices(N,  effect_size, mask=None, n_samples_group1=50, n_samp
     Returns:
     - group1 (np.ndarray): (n_samples_group1, N, N) correlation matrices for group 1.
     - group2 (np.ndarray): (n_samples_group2, N, N) correlation matrices for group 2.
+
+    >>> N = 6; e = 0.2; mask = np.zeros((N, N))
+    >>> mask[0:2, 0:2] = 1; mask[2:4, 2:4] = -1
+    >>> g1, g2, (c1,c2) = generate_fc_matrices(N, e, mask, 5, 10, seed = 0)
+    >>> g1.shape
+    (5, 6, 6)
+    >>> np.allclose(c1,c1.T)
+    True
     """
     if seed is not None:
         np.random.seed(seed)
@@ -37,7 +45,7 @@ def generate_fc_matrices(N,  effect_size, mask=None, n_samples_group1=50, n_samp
     # Create modified covariance for the second condition or group
     mod_cov = base_cov.copy()
     mod_cov[mask == 1] += effect_size + np.abs(np.random.normal(0,0.05, mod_cov[mask == 1].shape)) # Increase correlations in masked regions
-    mod_cov[mask == -1] -= effect_size - np.abs(np.random.normal(0,0.1, mod_cov[mask == 1].shape))  # Decrease correlations in masked regions
+    mod_cov[mask == -1] -= effect_size - np.abs(np.random.normal(0,0.1, mod_cov[mask == 1].shape)) # Decrease correlations in masked regions
     np.fill_diagonal(mod_cov, 1.0)
     mod_cov = (mod_cov+mod_cov.T)/2
 
@@ -47,8 +55,6 @@ def generate_fc_matrices(N,  effect_size, mask=None, n_samples_group1=50, n_samp
         eigvals, eigvecs = np.linalg.eigh(matrix)  # Get eigenvalues & eigenvectors
         eigvals[eigvals < eps] = eps  # Replace negative eigenvalues with small positive value
         return eigvecs @ np.diag(eigvals) @ eigvecs.T  # Reconstruct SPD matrix
-
-
 
 
     # Enforce SPD property
@@ -77,15 +83,19 @@ def create_simple_random(n_rep: int,
                          mean: float = 3.,
                          sigma: float = 1.):
     """
-
     Args:
-        n_rep:
-        dim1:
-        dim2:
-        mean:
-        sigma:
+        n_rep (int): Number of repeated measures
+        dim1 (int): ROI dimension M
+        dim2 (int): ROI dimension N
+        mean (float): Peak mean values to populate 
+        sigma (float): Standard deviation of population
 
-    Returns:
+    Returns: 
+        arr (np.ndarray): array of shape n_rep*M*N
+
+    >>> arr = create_simple_random(15, [10, 5], mean=3, sigma=1.5)
+    >>> arr.shape
+    (15, 10, 5)
 
     """
     arr = np.array([np.random.normal(mean, sigma,
@@ -111,13 +121,19 @@ def create_mv_normal(n_rep: int,
     """ Create predefined number of multivariate time series with the same covariance
 
     Args:
-        n_samples:
-        n_features:
-        alpha:
-        smallest_coef:
-        largest_coef:
+        n_rep (int): Number of repeated measures
+        n_samples (int): Number of matrices
+        n_features (int): Number of ROIs
+        alpha (float): Sparisty in measures 
+        smallest_coef (float): Lower value range control
+        largest_coef (float): Upper value Range control
 
     Returns:
+        Time series records: with n_rep*n_samples*n_features
+        covariance matrix
+        X_list (list): A list of (n_rep) repeated measures of (n_samples*n_features)
+        cov (np.ndarray): Covariance matrix
+        prec (np.ndarray): Symmetric precision matrix
 
     """
 
@@ -147,6 +163,27 @@ def create_correlation_data(n_rep: int,
                             dim2: int,
                             mean: float = 3.,
                             sigma: float = 1.):
+    """ Create functional connectivity matrices and add correlation between themn
+    Args:
+        n_rep (int): Number of repeated measures
+        dim1 (int): ROI dimension M
+        dim2 (int): ROI dimension N
+        mean (float): Peak mean values to populate 
+        sigma (float): Standard deviation of population
+
+    Returns: 
+        y (np.ndarray): Target vector 
+        arr (np.ndarray): subject matrices of shape n_rep*M*N 
+        dim1idxs (np.ndarray): indexs with actual correlatioon 
+        dim2idxs (np.ndarray): indexs with actual correlatioon 
+
+    >>> y, arr, (dim1idxs, dim2idxs) = create_correlation_data(10, 20, 5)
+    >>> corrs = [np.corrcoef(y, arr[:, dim1idxs[i], dim2idxs[i]])[0][1] for i in range(len(dim2idxs))]
+    >>> corrs_all_0 = [np.corrcoef(y, arr[:, i, 0])[0][1] for i in range(arr.shape[1])]
+    >>> np.mean(corrs) > np.mean(corrs_all_0)
+    True
+        
+    """
     arr = np.array([np.random.normal(mean, sigma,
                                      size=(dim1, dim2)) for _ in range(n_rep)])
     dim1idxs = np.random.randint(dim1, size=max(1, dim1 // 5))
@@ -154,4 +191,6 @@ def create_correlation_data(n_rep: int,
     y = np.random.normal(0, 1, size=n_rep)
     for idx1, idx2 in zip(dim1idxs, dim2idxs):
         y += np.random.uniform(0.6, 0.9) * arr[:, idx1, idx2]
+
+
     return y, arr, (dim1idxs, dim2idxs)

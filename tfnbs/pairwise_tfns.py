@@ -1,11 +1,9 @@
 import numpy as np
-from typing import Optional, Callable, Any, Union, Dict, Tuple
 import numpy.typing as npt
-from functools import partial
-
 from numpy import ndarray, dtype
-
-from .tfnos import get_tfce_score_scipy
+from typing import Optional, Callable, Any, Union, Dict, Tuple
+from functools import partial
+from tfnos import get_tfce_score_scipy
 from multiprocessing import Pool
 
 
@@ -18,6 +16,29 @@ def compute_p_val(group1: npt.NDArray[np.float64],
                   random_state: Optional[int] = None,
                   n_processes: Optional[int] = None,
                   **kwargs):
+    """
+    Function to compute P-values for statistical data using TFNOS and Standard T-Test approaches
+    
+    Arguments:
+        group1 (np.float64): Input matrices of group 1 of dimension N*N
+        group2 (np.float64): Input matrices of group 2 of dimension N*N
+        n_permutations (int): Number of permutations for null distribution 
+        paired (bool): Test type (False, individual), (True,paired)
+        tf (bool): T statistics to be generated (True, TFCE T-statistics), (False, Standard T-test)
+        use_mp (bool): Use parallel pools for computing
+        random_state (int): Optional - Set Random seed
+        n_processes (int): Optional - Set CPU cores for parallel computing 
+
+    Output: 
+        p_values (np.ndarray): Computed p-values for given data
+
+    >>> group1 = np.random.rand(5, 3, 3); for arr in group1: np.fill_diagonal(arr,1)
+    >>> group2 = np.random.rand(8, 3, 3); for arr in group2: np.fill_diagonal(arr,1)
+    >>> p_vals = compute_p_val(group1, group2, n_permutations=10, paired=False, tf=False, random_state = 0)
+    >>> p_vals['g2>g1'].mean() < p_vals['g1>g2'].mean() 
+    True
+    
+    """
     if paired is True:
         t_func = compute_t_stat_tfnos_diffs if tf else compute_t_stat_diff
         emp_t_dict = t_func(compute_diffs(group1, group2), **kwargs)
@@ -146,6 +167,13 @@ def compute_null_dist(group1: npt.NDArray[np.float64],
 
     Raises:
         ValueError: If shapes are incompatible, sample sizes are too small, or n_permutations < 1.
+        
+    >>> group1 = np.random.rand(3, 3)
+    >>> group2 = np.random.rand(3, 3)
+    >>> null_d = compute_null_dist(group1, group2, compute_t_stat)
+    >>> isinstance(null_d, dict)
+    True
+
     """
     # Validate inputs
     if group1.shape[1:] != group2.shape[1:]:
@@ -164,7 +192,7 @@ def compute_null_dist(group1: npt.NDArray[np.float64],
 
     # Set random state and generate unique seeds
     rng = np.random.RandomState(random_state)
-    seeds = rng.randint(0, 2 ** 32 - 1, size=n_permutations)
+    seeds = rng.randint(0, 2 ** 32 - 1, size=n_permutations, dtype=np.int64)
 
     # Prepare arguments for starmap: list of (full_group, n1, seed) tuples
     #task_args = [(full_group, func, n1, seed, func_kwargs) for seed in seeds]
@@ -243,6 +271,16 @@ def compute_permute_t_stat_ind(group1: npt.NDArray[np.float64],
         Permutes group assignments by shuffling the concatenated data and splitting
         into original group sizes. Assumes compute_t_stat_ind computes Welch’s t-test.
         Useful for building a null distribution in permutation testing.
+
+    >>> import numpy as np
+    >>> group1 = np.random.rand(5, 3, 3)
+    >>> group2 = np.random.rand(5, 3, 3)
+    >>> perm_t_pos, perm_t_neg = compute_permute_t_stat_ind(group1, group2, 10)
+    >>> perm_t_pos >1
+    True
+    >>> perm_t_neg >1
+    True
+
     """
     # Validate input shapes
     if group1.shape[1:] != group2.shape[1:]:
@@ -270,6 +308,10 @@ def compute_permute_t_stat_ind(group1: npt.NDArray[np.float64],
 
 
 def compute_permute_t_stat_diff(diffs: npt.NDArray) -> tuple[float, float]:
+    """
+    Computes the maximum t-statistic for paired groups
+
+    """
     n_dims = len(diffs.shape) - 1
     faked_dims = [1] * n_dims
     perm_diffs = np.random.choice([1, -1], diffs.shape[0]).reshape(-1, *faked_dims) * diffs
@@ -289,7 +331,7 @@ def compute_t_stat_tfnos(group1: npt.NDArray[np.float64],
 
     Args:
         group1: Array of shape (n_samples_1, N*N) containing data for group 1.
-        group2: Array of shape (n_samples_2, NxN) containing data for group 2.
+        group2: Array of shape (n_samples_2, N*N) containing data for group 2.
         paired: Whether to compute pairwise t-statistics.
         e: Exponent parameter for TFCE transformation (default=0.4).
         h: Height parameter for TFCE transformation (default=3).
@@ -302,6 +344,13 @@ def compute_t_stat_tfnos(group1: npt.NDArray[np.float64],
 
     Notes:
         - Uses TFCE transformation on Welch’s t-statistics.
+
+    >>> group1 = np.random.rand(3, 3)
+    >>> group2 = np.random.rand(3, 3)
+    >>> np.fill_diagonal(group1, 0); np.fill_diagonal(group2, 0)
+    >>> result = compute_t_stat_tfnos(group1, group2, 0, 0.4, 3, 100)
+    >>> # Check if upper triangle mean is less than size - error here
+                
     """
     t_stat_dict = compute_t_stat(group1, group2, paired=paired)
     score_pos = get_tfce_score_scipy(t_stat_dict["g2>g1"], e, h, n)
@@ -403,6 +452,13 @@ def compute_t_stat_diff(diff: npt.NDArray[np.float64]) -> Dict[str, npt.NDArray[
 
     Notes:
         Uses sample standard deviation with ddof=1 for unbiased variance estimation.
+
+    >>> import numpy as np
+    >>> group_1 = np.array([[0, 2, 1], [3, 0, 1], [2, 2, 0]])
+    >>> group_2 = np.array([[0, 1, 3], [1, 0, 1], [3, 1, 0]])
+    >>> result = compute_t_stat_diff(compute_diffs(group1, group2))
+    >>> result['g2>g1'].shape[0] == group1.shape[0]
+    True
     """
 
     assert np.allclose(diff.mean(axis=0), diff.mean(axis=0).T, atol=1e-8), "Only symmetric differences are supported. Participants should be along 0 axis"
