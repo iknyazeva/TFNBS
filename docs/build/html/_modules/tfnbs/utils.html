@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>tfnbs.utils &#8212; TFNBS 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=12dfc556" />
+    <script src="../../_static/documentation_options.js?v=2709fde1"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for tfnbs.utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">npt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+
+
+<div class="viewcode-block" id="fisher_r_to_z">
+<a class="viewcode-back" href="../../tfnbs.html#tfnbs.utils.fisher_r_to_z">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">fisher_r_to_z</span><span class="p">(</span><span class="n">r</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
+                  <span class="n">handle_bounds</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                  <span class="n">max_z</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Apply Fisher r-to-z transformation to correlation coefficients, handling boundary cases.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        r: Array of correlation coefficients with values in [-1, 1].</span>
+<span class="sd">           Can be any shape (scalar, 1D, 2D, etc.).</span>
+<span class="sd">        handle_bounds: If True, replace infinite z-values (from r = ±1) with finite values.</span>
+<span class="sd">           If False, allow infinities and raise a warning. Defaults to True.</span>
+<span class="sd">        max_z: Maximum absolute z-value to use when handle_bounds=True.</span>
+<span class="sd">           Defaults to 1e10 (a large but finite value).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Array of z-scores with the same shape as r.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If any value in r is outside [-1, 1].</span>
+
+<span class="sd">    Warnings:</span>
+<span class="sd">        UserWarning: If r contains ±1, indicating boundary values were encountered.</span>
+
+<span class="sd">    Notes:</span>
+<span class="sd">        The transformation is z = arctanh(r). For r = ±1, z approaches ±infinity.</span>
+<span class="sd">        When handle_bounds=True, these are capped at ±max_z.</span>
+
+<span class="sd">    &gt;&gt;&gt; test is needed here?</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Convert input to numpy array and ensure float type</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+    <span class="c1"># Check that all values are in [-1, 1]</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">((</span><span class="n">r</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">r</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Correlation coefficients must be in the range [-1, 1].&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Apply Fisher transformation</span>
+    <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">invalid</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">):</span>  <span class="c1"># Suppress warnings for arctanh at ±1</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctanh</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+
+    <span class="c1"># Check for boundary values (r = ±1)</span>
+    <span class="n">bounds_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">bounds_mask</span><span class="p">):</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;Input contains r = ±1, resulting in infinite z-values. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Clapped at ±&#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">str</span><span class="p">(</span><span class="n">max_z</span><span class="p">)</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">handle_bounds</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;Left as infinity.&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="ne">UserWarning</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">handle_bounds</span><span class="p">:</span>
+            <span class="c1"># Replace inf with finite values</span>
+            <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">bounds_mask</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">*</span> <span class="n">max_z</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">z</span></div>
+
+
+
+<span class="c1"># Inverse function (z to r) for completeness</span>
+<div class="viewcode-block" id="fisher_z_to_r">
+<a class="viewcode-back" href="../../tfnbs.html#tfnbs.utils.fisher_z_to_r">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">fisher_z_to_r</span><span class="p">(</span><span class="n">z</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert Fisher z-scores back to correlation coefficients.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        z: Array of z-scores (any shape).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Array of correlation coefficients in (-1, 1) with the same shape as z.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">z</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_components">
+<a class="viewcode-back" href="../../tfnbs.html#tfnbs.utils.get_components">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_components</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">no_depend</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Returns the components of an undirected graph specified by the binary and</span>
+<span class="sd">    undirected adjacency matrix adj. Components and their constitutent nodes</span>
+<span class="sd">    are assigned the same index and stored in the vector, comps. The vector,</span>
+<span class="sd">    comp_sizes, contains the number of nodes beloning to each component.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    A : NxN np.ndarray</span>
+<span class="sd">        binary undirected adjacency matrix</span>
+<span class="sd">    no_depend : Any</span>
+<span class="sd">        Does nothing, included for backwards compatibility</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    comps : Nx1 np.ndarray</span>
+<span class="sd">        vector of component assignments for each node</span>
+<span class="sd">    comp_sizes : Mx1 np.ndarray</span>
+<span class="sd">        vector of component sizes</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Note: disconnected nodes will appear as components with a component</span>
+<span class="sd">    size of 1</span>
+
+<span class="sd">    Note: The identity of each component (i.e. its numerical value in the</span>
+<span class="sd">    result) is not guaranteed to be identical the value returned in BCT,</span>
+<span class="sd">    matlab code, although the component topology is.</span>
+
+<span class="sd">    Many thanks to Nick Cullen for providing this implementation</span>
+
+
+<span class="sd">    # generate matrices  </span>
+<span class="sd">    # convert to z scores </span>
+<span class="sd">    # compute -t stat difference</span>
+<span class="sd">    # using t stats, calculate adjoint matrix</span>
+<span class="sd">    # get_components </span>
+<span class="sd">    # Check instances where compnent_size == 1</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">A</span> <span class="o">==</span> <span class="n">A</span><span class="o">.</span><span class="n">T</span><span class="p">):</span>  <span class="c1"># ensure matrix is undirected</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s1">&#39;get_components can only be computed for undirected&#39;</span>
+                             <span class="s1">&#39; matrices.  If your matrix is noisy, correct it with np.around&#39;</span><span class="p">)</span>
+
+    <span class="n">A</span> <span class="o">=</span> <span class="n">binarize</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">fill_diagonal</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">edge_map</span> <span class="o">=</span> <span class="p">[{</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">}</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">if</span> <span class="n">A</span><span class="p">[</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">union_sets</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">edge_map</span><span class="p">:</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">union_sets</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">s</span><span class="o">.</span><span class="n">isdisjoint</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+                <span class="n">item</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="n">union_sets</span> <span class="o">=</span> <span class="n">temp</span>
+
+    <span class="n">comps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span>
+                      <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">union_sets</span><span class="p">))</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">union_sets</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+    <span class="n">comp_sizes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">union_sets</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">comps</span><span class="p">,</span> <span class="n">comp_sizes</span></div>
+
+
+
+<div class="viewcode-block" id="binarize">
+<a class="viewcode-back" href="../../tfnbs.html#tfnbs.utils.binarize">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">binarize</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Binarizes an input weighted connection matrix.  If copy is not set, this</span>
+<span class="sd">    function will *modify W in place.*</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    W : NxN np.ndarray</span>
+<span class="sd">        weighted connectivity matrix</span>
+<span class="sd">    copy : bool</span>
+<span class="sd">        if True, returns a copy of the matrix. Otherwise, modifies the matrix</span>
+<span class="sd">        in place. Default value=True.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    W : NxN np.ndarray</span>
+<span class="sd">        binary connectivity matrix</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">copy</span><span class="p">:</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">W</span><span class="p">[</span><span class="n">W</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">W</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">TFNBS</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, IMCH RAN.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.4.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

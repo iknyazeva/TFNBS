@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>tfnbs package &#8212; TFNBS 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=12dfc556" />
+    <script src="_static/documentation_options.js?v=2709fde1"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="tfnbs-package">
+<h1>tfnbs package<a class="headerlink" href="#tfnbs-package" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-tfnbs.datasets">
+<span id="tfnbs-datasets-module"></span><h2>tfnbs.datasets module<a class="headerlink" href="#module-tfnbs.datasets" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="tfnbs.datasets.create_correlation_data">
+<span class="sig-prename descclassname"><span class="pre">tfnbs.datasets.</span></span><span class="sig-name descname"><span class="pre">create_correlation_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_rep</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfnbs/datasets.html#create_correlation_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfnbs.datasets.create_correlation_data" title="Link to this definition">¶</a></dt>
+<dd><p>Create functional connectivity matrices and add correlation between themn
+:param n_rep: Number of repeated measures
+:type n_rep: int
+:param dim1: ROI dimension M
+:type dim1: int
+:param dim2: ROI dimension N
+:type dim2: int
+:param mean: Peak mean values to populate
+:type mean: float
+:param sigma: Standard deviation of population
+:type sigma: float</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Target vector
+arr (np.ndarray): subject matrices of shape n_rep*M*N
+dim1idxs (np.ndarray): indexs with actual correlatioon
+dim2idxs (np.ndarray): indexs with actual correlatioon</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>y (np.ndarray)</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">y</span><span class="p">,</span> <span class="n">arr</span><span class="p">,</span> <span class="p">(</span><span class="n">dim1idxs</span><span class="p">,</span> <span class="n">dim2idxs</span><span class="p">)</span> <span class="o">=</span> <span class="n">create_correlation_data</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corrs</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">arr</span><span class="p">[:,</span> <span class="n">dim1idxs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">dim2idxs</span><span class="p">[</span><span class="n">i</span><span class="p">]])[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dim2idxs</span><span class="p">))]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corrs_all_0</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">arr</span><span class="p">[:,</span> <span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">])[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">corrs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">corrs_all_0</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tfnbs.datasets.create_mv_normal">
+<span class="sig-prename descclassname"><span class="pre">tfnbs.datasets.</span></span><span class="sig-name descname"><span class="pre">create_mv_normal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_rep</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smallest_coef</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">largest_coef</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.7</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfnbs/datasets.html#create_mv_normal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfnbs.datasets.create_mv_normal" title="Link to this definition">¶</a></dt>
+<dd><p>Create predefined number of multivariate time series with the same covariance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_rep</strong> (<em>int</em>) – Number of repeated measures</p></li>
+<li><p><strong>n_samples</strong> (<em>int</em>) – Number of matrices</p></li>
+<li><p><strong>n_features</strong> (<em>int</em>) – Number of ROIs</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – Sparisty in measures</p></li>
+<li><p><strong>smallest_coef</strong> (<em>float</em>) – Lower value range control</p></li>
+<li><p><strong>largest_coef</strong> (<em>float</em>) – Upper value Range control</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>with n_rep*n_samples*n_features
+covariance matrix
+X_list (list): A list of (n_rep) repeated measures of (n_samples*n_features)
+cov (np.ndarray): Covariance matrix
+prec (np.ndarray): Symmetric precision matrix</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Time series records</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tfnbs.datasets.create_nd_random_arr">
+<span class="sig-prename descclassname"><span class="pre">tfnbs.datasets.</span></span><span class="sig-name descname"><span class="pre">create_nd_random_arr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_rep</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dims</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfnbs/datasets.html#create_nd_random_arr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfnbs.datasets.create_nd_random_arr" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tfnbs.datasets.create_simple_random">
+<span class="sig-prename descclassname"><span class="pre">tfnbs.datasets.</span></span><span class="sig-name descname"><span class="pre">create_simple_random</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_rep</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dims</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfnbs/datasets.html#create_simple_random"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfnbs.datasets.create_simple_random" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_rep</strong> (<em>int</em>) – Number of repeated measures</p></li>
+<li><p><strong>dim1</strong> (<em>int</em>) – ROI dimension M</p></li>
+<li><p><strong>dim2</strong> (<em>int</em>) – ROI dimension N</p></li>
+<li><p><strong>mean</strong> (<em>float</em>) – Peak mean values to populate</p></li>
+<li><p><strong>sigma</strong> (<em>float</em>) – Standard deviation of population</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>array of shape n_rep*M*N</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>arr (np.ndarray)</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">arr</span> <span class="o">=</span> <span class="n">create_simple_random</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="n">mean</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(15, 10, 5)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tfnbs.datasets.generate_fc_matrices">
+<span class="sig-prename descclassname"><span class="pre">tfnbs.datasets.</span></span><span class="sig-name descname"><span class="pre">generate_fc_matrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">effect_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples_group1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples_group2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repeated_measures</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfnbs/datasets.html#generate_fc_matrices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfnbs.datasets.generate_fc_matrices" title="Link to this definition">¶</a></dt>
+<dd><p>Generate example functional connectivity correlation matrices for groupwise comparisons
+or repeated measures.</p>
+<p>Parameters:
+- N (int): Number of ROIs (regions of interest).
+- effect_size (float): Magnitude of the difference applied in the masked regions.
+- mask (np.ndarray): Binary mask (N x N) indicating where differences should be applied.
+- n_samples_group1 (int): Number of matrices in group 1 (default: 50).
+- n_samples_group2 (int): Number of matrices in group 2 (default: 50).
+- repeated_measures (bool): If True, generate within-subject repeated measures data.
+- seed (int, optional): Random seed for reproducibility.</p>
+<p>Returns:
+- group1 (np.ndarray): (n_samples_group1, N, N) correlation matrices for group 1.
+- group2 (np.ndarray): (n_samples_group2, N, N) correlation matrices for group 2.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">N</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span> <span class="n">e</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">;</span> <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mask</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">mask</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g1</span><span class="p">,</span> <span class="n">g2</span><span class="p">,</span> <span class="p">(</span><span class="n">c1</span><span class="p">,</span><span class="n">c2</span><span class="p">)</span> <span class="o">=</span> <span class="n">generate_fc_matrices</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g1</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(5, 6, 6)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">c1</span><span class="p">,</span><span class="n">c1</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="tfnbs-nbs-utils-module">
+<h2>tfnbs.nbs_utils module<a class="headerlink" href="#tfnbs-nbs-utils-module" title="Link to this heading">¶</a></h2>
+</section>
+<section id="tfnbs-pairwise-tfns-module">
+<h2>tfnbs.pairwise_tfns module<a class="headerlink" href="#tfnbs-pairwise-tfns-module" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-tfnbs.tfnos">
+<span id="tfnbs-tfnos-module"></span><h2>tfnbs.tfnos module<a class="headerlink" href="#module-tfnbs.tfnos" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="tfnbs.tfnos.get_tfce_score">
+<span class="sig-prename descclassname"><span class="pre">tfnbs.tfnos.</span></span><span class="sig-name descname"><span class="pre">get_tfce_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_stats</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_thres</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.65</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfnbs/tfnos.html#get_tfce_score"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfnbs.tfnos.get_tfce_score" title="Link to this definition">¶</a></dt>
+<dd><p>Transform the connectivity matrix using Threshold-Free Network-Oriented Statistics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>statsmat</strong> (<em>numpy.ndarray</em>) – The statistic matrix to be transformed.</p></li>
+<li><p><strong>e</strong> (<em>float</em>) – Extent exponent (a scalar).</p></li>
+<li><p><strong>h</strong> (<em>float</em>) – Height exponent (a scalar).</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – Number of steps for cluster formation.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Transformed TFNOS scores.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tfnbs.tfnos.get_tfce_score_scipy">
+<span class="sig-prename descclassname"><span class="pre">tfnbs.tfnos.</span></span><span class="sig-name descname"><span class="pre">get_tfce_score_scipy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_stats</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_thres</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.65</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfnbs/tfnos.html#get_tfce_score_scipy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfnbs.tfnos.get_tfce_score_scipy" title="Link to this definition">¶</a></dt>
+<dd><p>Transform the connectivity matrix using Threshold-Free Network-Oriented Statistics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t_stats</strong> (<em>np.ndarray</em>) – The statistic matrix (N x N).</p></li>
+<li><p><strong>e</strong> (<em>float</em><em> or </em><em>list</em><em> of </em><em>float</em>) – Extent exponent(s).</p></li>
+<li><p><strong>h</strong> (<em>float</em><em> or </em><em>list</em><em> of </em><em>float</em>) – Height exponent(s).</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – Number of steps for cluster formation.</p></li>
+<li><p><strong>start_thres</strong> (<em>float</em>) – Threshold value (a scalar) start for integration</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Transformed TFNOS scores with shape (N, N, len(e_list)).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-tfnbs.utils">
+<span id="tfnbs-utils-module"></span><h2>tfnbs.utils module<a class="headerlink" href="#module-tfnbs.utils" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="tfnbs.utils.binarize">
+<span class="sig-prename descclassname"><span class="pre">tfnbs.utils.</span></span><span class="sig-name descname"><span class="pre">binarize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfnbs/utils.html#binarize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfnbs.utils.binarize" title="Link to this definition">¶</a></dt>
+<dd><p>Binarizes an input weighted connection matrix.  If copy is not set, this
+function will <em>modify W in place.</em></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>W</strong> (<em>NxN np.ndarray</em>) – weighted connectivity matrix</p></li>
+<li><p><strong>copy</strong> (<em>bool</em>) – if True, returns a copy of the matrix. Otherwise, modifies the matrix
+in place. Default value=True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>W</strong> – binary connectivity matrix</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>NxN np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tfnbs.utils.fisher_r_to_z">
+<span class="sig-prename descclassname"><span class="pre">tfnbs.utils.</span></span><span class="sig-name descname"><span class="pre">fisher_r_to_z</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handle_bounds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_z</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/tfnbs/utils.html#fisher_r_to_z"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfnbs.utils.fisher_r_to_z" title="Link to this definition">¶</a></dt>
+<dd><p>Apply Fisher r-to-z transformation to correlation coefficients, handling boundary cases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r</strong> – Array of correlation coefficients with values in [-1, 1].
+Can be any shape (scalar, 1D, 2D, etc.).</p></li>
+<li><p><strong>handle_bounds</strong> – If True, replace infinite z-values (from r = ±1) with finite values.
+If False, allow infinities and raise a warning. Defaults to True.</p></li>
+<li><p><strong>max_z</strong> – Maximum absolute z-value to use when handle_bounds=True.
+Defaults to 1e10 (a large but finite value).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Array of z-scores with the same shape as r.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If any value in r is outside [-1, 1].</p>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>UserWarning: If r contains ±1, indicating boundary values were encountered.</p>
+</div>
+<p class="rubric">Notes</p>
+<p>The transformation is z = arctanh(r). For r = ±1, z approaches ±infinity.
+When handle_bounds=True, these are capped at ±max_z.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; test is needed here?
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tfnbs.utils.fisher_z_to_r">
+<span class="sig-prename descclassname"><span class="pre">tfnbs.utils.</span></span><span class="sig-name descname"><span class="pre">fisher_z_to_r</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/tfnbs/utils.html#fisher_z_to_r"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfnbs.utils.fisher_z_to_r" title="Link to this definition">¶</a></dt>
+<dd><p>Convert Fisher z-scores back to correlation coefficients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>z</strong> – Array of z-scores (any shape).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Array of correlation coefficients in (-1, 1) with the same shape as z.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tfnbs.utils.get_components">
+<span class="sig-prename descclassname"><span class="pre">tfnbs.utils.</span></span><span class="sig-name descname"><span class="pre">get_components</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_depend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfnbs/utils.html#get_components"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfnbs.utils.get_components" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the components of an undirected graph specified by the binary and
+undirected adjacency matrix adj. Components and their constitutent nodes
+are assigned the same index and stored in the vector, comps. The vector,
+comp_sizes, contains the number of nodes beloning to each component.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>A</strong> (<em>NxN np.ndarray</em>) – binary undirected adjacency matrix</p></li>
+<li><p><strong>no_depend</strong> (<em>Any</em>) – Does nothing, included for backwards compatibility</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>comps</strong> (<em>Nx1 np.ndarray</em>) – vector of component assignments for each node</p></li>
+<li><p><strong>comp_sizes</strong> (<em>Mx1 np.ndarray</em>) – vector of component sizes</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Note: disconnected nodes will appear as components with a component
+size of 1</p>
+<p>Note: The identity of each component (i.e. its numerical value in the
+result) is not guaranteed to be identical the value returned in BCT,
+matlab code, although the component topology is.</p>
+<p>Many thanks to Nick Cullen for providing this implementation</p>
+<p># generate matrices
+# convert to z scores
+# compute -t stat difference
+# using t stats, calculate adjoint matrix
+# get_components
+# Check instances where compnent_size == 1</p>
+</dd></dl>
+
+</section>
+<section id="module-tfnbs">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tfnbs" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">TFNBS</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, IMCH RAN.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.4.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="_sources/tfnbs.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
