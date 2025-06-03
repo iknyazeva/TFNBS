@@ -3,7 +3,7 @@ import numpy.typing as npt
 from tfnbs.utils import get_components
 
 def nbs_bct(group1, group2, threshold, n_permutations = 100, tail = 'both', 
-            paired = False, random_seed = 42)
+            paired = False, random_seed = 42):
 
     ix, iy, iz = group1.shape
     
