@@ -1,73 +1,80 @@
 import numpy as np
 import numpy.typing as npt
-from tfnbs.utils import get_components
+from pairwise_tfns import *
+from utils import *
 
-def nbs_bct(group1, group2, threshold, n_permutations = 100, tail = 'both', 
-            paired = False, random_seed = 42):
-
-    ix, iy, iz = group1.shape
+def nbs_bct(group1: npt.NDArray[np.float64],
+            group2: npt.NDArray[np.float64],
+            threshold: int = 2.0,
+            n_permutations: int = 1000,
+            paired: bool = True,
+            use_mp: bool = True,
+            random_state: Optional[int] = None,
+            n_processes: Optional[int] = None,
+            **kwargs):
     
-    # Initial T Test for the groups and acquire T-statistics matrix 
-    if paired == False:
-        t_stat = compute_t_stat(taskA, taskB, paired = False)
-        # Make seperate instances for when taska & task b are different diensions ix2, iy2, iz2 = shape.g1/g2
+    '''
+    Parameters:
+        group1 (np.ndarray): Input matrices of group 1 of dimension K*N*N
+        group2 (np.ndarray): Input matrices of group 2 of dimension K*N*N
+        threshold (int): Explcity cut-off threshold for T-statistics
+        n_permutations (int): Number of permutations for null distribution
+        paired (bool): Test type (False, individual) (True, Paired test)
+        use_mp (bool): Use multiple cores for computation
+        random_state (int): static Random state
+        n_processes (int): number of processor cores for parallel computation
+
+    Returns: 
+        p_values (np.ndarray): Computed p-values for given groups
+        adj_matrices (np.ndarray): Adjoint matrix of N*N dimensions representing boolean state greater than threshold
+        max_null_dict : REVISE
+
+    Note: The output adjoint matrix consists of both comparisons comprise of tails explicitly given as g1>g2 & g2>g1
+    
+    ---- NEED TO VERIFY IF EXPLICIT TAIL FUNCTIONALITY IS ACCURATE 
+
+    '''
+    # Need to add conditional check for shapes of Group 1/group 2 
+
+    # need to add condition for Paired condition iX == iy should be true
+
+    # need to add condition to ensure number of cores are mentioned whne using use_mp = true 
+
+
+    if paired:
+        t_func = compute_t_stat_diff
+        emp_t_dict = t_func(compute_diffs(group1, group2))
     else:
-        t_stat = compute_t_stat(taskA, taskB, paired = True)
-        #t_stat_diff = compute_t_stat_diff(taskA, taskB, paired = True)
-    
+        t_func = compute_t_stat
+        emp_t_dict = t_func(group1, group2, paired=False, **kwargs)
 
-    # Get binary matrix - w.r.t threshold 
-    t_stats_g1 = t_stat['g2>g1']
-    t_stats_g2 = t_stat['g1>g2']
+    adj_matrices = {}
+    for key in emp_t_dict:
+        emp_t = emp_t_dict[key]
+        adj = (emp_t > threshold).astype(np.uint8)
+        if adj.shape[-1] == adj.shape[-2]:
+            adj = np.triu(adj, 1)
+            adj = adj + adj.T
+        adj_matrices[key] = adj
 
-    # Extract indices of corr greater than threshold 
-    ind_t_g1 = np.where(t_stats_g1[0] > threshold)
-    ind_t_g2 = np.where(t_stats_g2[0] > threshold)
-    np.fill_diagonal([ind_t_g1, ind_t_g2], 0)
-    
+    max_null_dict = compute_null_dist(group1,
+                                      group2,
+                                      t_func,
+                                      n_permutations=n_permutations,
+                                      paired=paired,
+                                      use_mp=use_mp,
+                                      random_state=random_state,
+                                      n_processes=n_processes)
 
-    # intialize empty matrix of size
-    adj = np.zeros((100, 100))
-    a, sz = get_components(ind_t_g1)
-    uni_labels = np.unique(a)
+    keys = list(emp_t_dict.keys())
+    p_values = dict()
+    if len(emp_t_dict[keys[0]].shape) == 2:
+        for key in keys:
+            emp_t = emp_t_dict[key][..., np.newaxis]
+            p_values[key] = np.mean(emp_t < max_null_dict[key], axis=-1)
+    else:
+        for key in keys:
+            emp_t = emp_t_dict[key][..., np.newaxis]
+            p_values[key] = np.mean(emp_t < max_null_dict[key].swapaxes(0, 1)[None, None, ...], axis=-1)
 
-    # ---------
-    # to acqure observed component siez in number of edges
-    observed_sizes = []
-    for label in component_labels:
-        if sz[label - 1] > 1:
-            nodes = np.where(a == label)[0]
-            subgraph = adj[np.ix_(nodes, nodes)]
-            size = np.sum(subgraph) / 2  # undirected
-            observed_sizes.append(size)
-    # rework --?
-
-    # Randomize labels -> Peform tt test - adjmatrix - find connected components -> accumulate connected componbets in varaible
-    
-
-
-    # Calculate p value for number of cnnected edges/
-    pvals = [(np.sum(np.array(null_dist) >= size) + 1) / (n_permutations + 1) for size in observed_sizes] # internally 
-
-
-    return p_vals, adj, null
-
-
-
-# inputs: Group 1, Group2, threshold, permutation, paired, seed, 
-# myabe tail? 
-
-
-# Initial T Test for the groups and acquire T-statistics matrix 
-
-# Get binary matrix - w.r.t threshold 
-
-# Get adjacency matrix
-# Calculate conected components using get_Components
-
-# Randomize labels and then perform ttest - adj matrix - find connected components -> accumulate connectd components in variable 
-
-
-# Calcuilate p value: 
-# Pvalues - for number connected edges 
-# 
+    return p_values, adj_matrices, max_null_dict
