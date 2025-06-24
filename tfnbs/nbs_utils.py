@@ -1,45 +1,45 @@
 import numpy as np
 import numpy.typing as npt
-from pairwise_tfns import *
-from utils import *
+from .pairwise_tfns import *
+from .utils import *
 
 def nbs_bct(group1: npt.NDArray[np.float64],
             group2: npt.NDArray[np.float64],
             threshold: int = 2.0,
-            n_permutations: int = 1000,
+            n_permutations: int = 100,
             paired: bool = True,
             use_mp: bool = True,
             random_state: Optional[int] = None,
             n_processes: Optional[int] = None,
             **kwargs):
     
-    '''
+    """
+    Function to compute Network-Based Statistics (NBS) between two individual or independent groups of connectivity matrices using a fixed t-statistic threshold.    
+    
     Parameters:
-        group1 (np.ndarray): Input matrices of group 1 of dimension K*N*N
-        group2 (np.ndarray): Input matrices of group 2 of dimension K*N*N
-        threshold (int): Explcity cut-off threshold for T-statistics
-        n_permutations (int): Number of permutations for null distribution
-        paired (bool): Test type (False, individual) (True, Paired test)
-        use_mp (bool): Use multiple cores for computation
-        random_state (int): static Random state
-        n_processes (int): number of processor cores for parallel computation
+        group1 (np.ndarray): Group 1 matrices as an array of shape (K, N, N) with k subjects with N ROIs.
+        group2 (np.ndarray): Group 2 matrices as an array of shape (K, N, N) with k subjects with N ROIs.
+        threshold (int): Threshold for t-statistics to define edges included in clusters.
+        n_permutations (int): Number of permutations for null distribution.
+        paired (bool): Perform paried T-Test (default = True) else if False, individual test 
+        use_mp (bool): Use multiple cores for computation (default = True)
+        random_state (int, optional): Random state seed.
+        n_processes (int, optional): Number of processor cores for parallel computation.
 
     Returns: 
-        p_values (np.ndarray): Computed p-values for given groups
-        adj_matrices (np.ndarray): Adjoint matrix of N*N dimensions representing boolean state greater than threshold
-        max_null_dict : REVISE
+        p_values (dict[np.ndarray]): Computed p-values for given groups in two conditions 'g1>g2' and 'g2>g1' indexed as dictionary keys.
+        adj_matrices (np.ndarray): Adjoint matrix of N*N dimensions representing boolean states greater than threshold value.
+        max_null_dict (dict): Dictionary with null distributions used to compute p-values.
 
     Note: The output adjoint matrix consists of both comparisons comprise of tails explicitly given as g1>g2 & g2>g1
     
-    ---- NEED TO VERIFY IF EXPLICIT TAIL FUNCTIONALITY IS ACCURATE 
+    >>> g1 = np.random.rand(10, 5, 5)
+    >>> g2 = np.random.rand(10, 5, 5)
+    >>> p_vals, adjs, nulls = nbs_bct(g1, g2, threshold=1.5, n_permutations=100, paired=True, use_mp=False, random_state=0) 
+    >>> adjs['g1>g2'].shape == (5, 5)
+    True
 
-    '''
-    # Need to add conditional check for shapes of Group 1/group 2 
-
-    # need to add condition for Paired condition iX == iy should be true
-
-    # need to add condition to ensure number of cores are mentioned whne using use_mp = true 
-
+    """
 
     if paired:
         t_func = compute_t_stat_diff

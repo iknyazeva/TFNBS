@@ -5,6 +5,14 @@ from itertools import combinations
 import pandas as pd
 
 class Electrodes(Enum):
+    """
+    Class to return EEG electrode names and respective IDs based on 10-20 EEG system.
+
+    >>> Electrodes.Fp2.value
+    2
+    >>> Electrodes.P3.name
+    'P3'
+    """
     Fp1 = 1
     Fp2 = 2
     F7 = 3
@@ -26,6 +34,15 @@ class Electrodes(Enum):
     P4 = 19
 
 class Bands(Enum):
+    """
+    Class to return EEG frequency bands with respective IDs.
+
+    >>> Bands.alpha1.value
+    3
+    >>> Bands.get_name_by_id(6)
+    'beta2'
+    """
+
     delta = 1
     theta = 2
     alpha1 = 3
@@ -44,6 +61,25 @@ class Bands(Enum):
     
 
 class PairsElectrodes1020:
+    """
+    Class to resolve & return electrode pairs based on 10-20 EEG system.
+
+    Methods: 
+        electrode_pairs: Function to resolve indexed electrode names.
+        create_pairs_dict: Function to create mapped dictionary of electodes with pairs.
+
+    Attributes: 
+        electrodes (List[Electrodes]): List of electrodes to consider 
+        nearest (List[Tuple[str, str]]): List of electrode pairs 
+
+    >>> electrodes = [Electrodes.Fp1, Electrodes.Fp2, Electrodes.Fz]
+    >>> pairs_obj = PairsElectrodes1020(electrodes)
+    >>> pairs_obj.electrode_pairs
+    [('Fp1', 'Fp2'), ('Fp1', 'Fz'), ('Fp2', 'Fz')]
+    >>> pairs_dict = pairs_obj.create_pairs_dict(pairs_obj.nearest, filter_by=['Fp1'])
+    >>> ('Fp1', 'Fp2') in pairs_dict
+    True
+    """
     def __init__(self, electrodes: Electrodes):
         self.electrodes = electrodes
         self.nearest = [('Fp1', 'Fp2'),
@@ -80,10 +116,34 @@ class PairsElectrodes1020:
 
     @property
     def electrode_pairs(self):
+        """
+        Returns electrode names as an indexed list as per combinations
+
+        >>> electrodes = [Electrodes.Fp1, Electrodes.Fp2, Electrodes.Fz]
+        >>> pairs_obj = PairsElectrodes1020(electrodes)
+        >>> pairs_obj.electrode_pairs
+        [('Fp1', 'Fp2'), ('Fp1', 'Fz'), ('Fp2', 'Fz')]
+        """
         els = list(map(lambda x: x.name, self.electrodes))
         return list(combinations(els, 2))
 
     def create_pairs_dict(self, pairs_list, filter_by=None):
+        """
+        Creates a dictionary mapping electrode pairs to pairs_list. 
+
+        Parameters: 
+            pairs_list (list): List of electrode pairs (tuple) to be mapped.
+            filter_by (list, optional): List of electrodes to be filtered by name (Default = None).
+
+        Returns: 
+            pairs_dict (dict) = Dictionary with electrode pairs as keys (from self.electrode) mapped to 
+                                electrodes from pairs_list. 
+        
+        >>> electrodes = [Electrodes.Fp1, Electrodes.Fp2, Electrodes.Fz]
+        >>> pairs_obj = PairsElectrodes1020(electrodes)
+        >>> pairs_obj.electrode_pairs
+        [('Fp1', 'Fp2'), ('Fp1', 'Fz'), ('Fp2', 'Fz')]
+        """
         pairs_dict = dict()
         p_list = pairs_list.copy()
         els = list(map(lambda x: x.name, self.electrodes))
@@ -98,14 +158,16 @@ class PairsElectrodes1020:
 
 
 class EEGData:
-    '''
-    Class function for reading EEG data via constructors
-        data : [np.ndarray] EEG data of shape (n_subjects, n_channels, num_freqs)
-        subj_list : List[str] List of subject identifiers corresponding to the first axis of 'data'
-        electrodes : Enum, Enum represents electrodes
-        el_pairs_list : List[Tuple[str, str]] List of electrode pairs
-        bands : Enum or List[str] List of EEG frequency bands
-    '''
+    """
+    Class function for reading EEG data
+
+    Parameters: 
+        data (np.ndarray): EEG data of shape (n_subjects, n_channels, num_freqs).
+        subj_list (List[str]): List of subject identifiers corresponding to the first axis of 'data'.
+        electrodes (Enum): Enum represents electrodes.
+        el_pairs_list (List[Tuple[str, str]]): List of electrode pairs.
+        bands (List[str]): List of EEG frequency bands.
+    """
 
     def __init__(self, data, subj_list, electrodes, el_pairs_list, bands):
         self.data = data
@@ -119,17 +181,28 @@ def read_from_eeg_dataframe(path_to_df,
                             cond_prefix='fo',
                             band_list=None):
     
-    ''' 
-    Function to read EEG data from (.csv) format & load into (n_subjects, n_channels, num_freqs) format
+    """ 
+    Function to read EEG data from (.csv) format & load into (n_subjects, n_channels, num_freqs) format. 
 
     Parameters: 
-        path_to_df: str, path to csv file
-        cond_prefix: Condition string for 
-        band_list : List[int], optional, frequency bands
+        path_to_df (str): Path to csv file with EEG data.
+        cond_prefix (str, optional): String prefix for identification of condition w.r.t columns (default = 'fo').
+        band_list (list[int], optional) : List of frequency bands (default = None). 
 
     Returns: 
+        EEGData object with attributes: 
+            data (np.ndarray): EEG data array of shape (n_subjects, n_channels, n_freqs)
+            subj_list (List[str]): List of subject identifiers corresponding to the first axis of 'data'.
+            Electrodes (Enum): Returned as electrode class for channels with labels.
+            (pairs_dict.keys()) (tuple): Electrode pairs as a tuple. 
+            bands (Enum): Returned as Bands class of frequency bands.
 
-    '''
+    # '..\datasets\eeg_dataframe_nansfilled.csv'
+    >>> eeg_data = read_from_eeg_dataframe('datasets\eeg_dataframe_nansfilled.csv', cond_prefix='fo')
+    >>> eeg_data.data.shape
+    (177, 171, 7)
+
+    """
     if band_list is None:
         band_list = [1, 2, 3, 4, 5, 6, 7]        
         bands = Bands
@@ -156,12 +229,19 @@ def reshape_eeg_data(data: np.ndarray,
     for this instance of implementation.
 
     Parameters:
-        data: [np.ndarray] of shape (n_subjects,  chan_pairs, num_freqs)
-        reshape_bands (bool): default True, returns a block diagonal matrix where each block is w.r.t individual frequency bands
+        data (np.ndarray): Array of shape (n_subjects, chan_pairs, num_freqs)
+        reshape_bands (bool): Option to return a block diagonal matrix where each block returned as per individual frequency bands (default = True)
 
     Returns:
-        reshaped_data: [np.ndarray] of shape (n_subjects,  chan_pairs, num_freqs) or  (n_subjects, n_chans*n_freq, n_chans*n_freq,)
-        For single subjects, reshaped_data: [np.ndarray] of shape (chan_pairs, chan_pairs, num_freqs) or (chan_pairs*num_freqs, chan_pairs*num_freqs)        
+        reshaped_data (np.ndarray): Array of shape (n_subjects,  chan_pairs, num_freqs) or  (n_subjects, n_chans*n_freq, n_chans*n_freq,)
+        For single subjects = reshaped_data: [np.ndarray] of shape (chan_pairs, chan_pairs, num_freqs) or (chan_pairs*num_freqs, chan_pairs*num_freqs)        
+
+    >>> n_pairs = np.random.rand(2, len(PairsElectrodes1020(Electrodes).electrode_pairs), 3)  # 1 subject, all pairs, 2 freqs/len(PairsElectrodes1020(Electrodes).electrode_pairs)
+    >>> reshape_eeg_data(n_pairs, reshape_bands=False).shape
+    (2, 19, 19, 3)
+    >>> reshape_eeg_data(n_pairs, reshape_bands=True).shape
+    (2, 57, 57)
+
     """
 
     num_els = len(Electrodes) # Default 19 electrodes 
@@ -195,18 +275,27 @@ def reshape_eeg_data(data: np.ndarray,
 def inverse_reshape_eeg_data(
             reshaped_data: np.ndarray,
             reshape_bands: bool = True
-    ) -> np.ndarray:
+            ) -> np.ndarray:
+        
         """
-        Inversely reshape EEG data back to (n_subjects, chan_pairs, num_freqs).
+        Function to perform Inverse reshape of EEG data back to (n_subjects, chan_pairs, num_freqs) format.
 
         Parameters:
-            reshaped_data: [np.ndarray] EEG data of shape (n_subjects, num_els, num_els, num_freqs)
+            reshaped_data (np.ndarray): EEG data of shape (n_subjects, num_els, num_els, num_freqs).
             or (n_subjects, num_els*n_freqs, num_els*n_freqs) if reshape_bands=True.
-
-            reshape_bands (bool): Whether input is in band-flattened form.
+            reshape_bands (bool): To indicate if input is in band-flattened form.
 
         Returns:
-            np.ndarray: Original EEG data of shape (n_subjects, chan_pairs, num_freqs) or (chan_pairs, num_freq)
+            original_data (np.ndarray): Original EEG data of shape (n_subjects, chan_pairs, num_freqs) or (chan_pairs, num_freq)
+
+        # >>> from tfnbs.eeg_utils import reshape_eeg_data
+        >>> n_pairs = np.random.rand(2, len(PairsElectrodes1020(Electrodes).electrode_pairs), 3)
+        >>> reshaped_data = eshape_eeg_data(n_pairs, reshape_bands=True)
+        >>> reshaped_data.shape 
+        (2, 57, 57)
+        >>> inverse_data = inverse_reshape_eeg_data(reshaped_data, reshape_bands=True)
+        >>> inverse_data.shape
+        (2, 171, 3)
         """
 
         num_els = len(Electrodes) # Default 19 electrodes 
@@ -236,5 +325,4 @@ def inverse_reshape_eeg_data(
             i, j = Electrodes[el1].value - 1, Electrodes[el2].value - 1
             original_data[:, pair_idx, :] = reshaped_data[:, i, j, :]
 
-             
         return original_data[0] if dtype else original_data

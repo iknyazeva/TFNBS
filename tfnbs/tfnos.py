@@ -4,16 +4,29 @@ from scipy.sparse.csgraph import connected_components
 
 
 def get_tfce_score(t_stats, e, h, n, start_thres=1.65):
-    """ Transform the connectivity matrix using Threshold-Free Network-Oriented Statistics.
+    """ 
+    Function to transform the connectivity matrix using Threshold-Free Network-Oriented Statistics. 
 
     Parameters:
-        statsmat (numpy.ndarray): The statistic matrix to be transformed.
-        e (float ): Extent exponent (a scalar).
-        h (float ): Height exponent (a scalar).
-        n (int): Number of steps for cluster formation.
+        t_stats (np.ndarray): Statistical matrix to be transformed of dimnesions (N, N)
+        e (float): Extent exponent (a scalar).
+        h (float): Height exponent (a scalar).
+        n (int): Number of thresholds steps between start_thres and max(t_stats).
+        start_thres (float): Inital threshold for cluster formation (default = 1.65)
 
     Returns:
-        numpy.ndarray: Transformed TFNOS scores.
+        tfnos (np.ndarray): TFNOS score matrix of shape (N, N). 
+
+    >>>  t = np.array([[0, 2.1, 0.5],
+    ...               [2.1, 0, 2.5],
+    ...               [0.5, 2.5, 0]])
+    >>> np.round(get_tfce_score(t, e=0.5, h=2.0, n=10), 2)
+    array([[0.  , 8.48, 0.  ],
+           [8.48, 0.  , 8.48],
+           [0.  , 8.48, 0.  ]])
+
+    Notes: This function uses networkx to compute connected components within the cluster. 
+
     """
     # Input validation: Diagonal elements must be zero (no self-connections)
 
@@ -50,7 +63,6 @@ def get_tfce_score(t_stats, e, h, n, start_thres=1.65):
     dh = (max_stat - start_thres) / n
     if dh == 0:
         return tfnos  # Return zero matrix if no variation
-    # threshs = np.linspace(dh, max_stat, n)
     threshs = np.linspace(start_thres+dh, max_stat, n)
 
     # Reshape e and h for broadcasting (only if in multi-value mode)
@@ -82,18 +94,27 @@ def get_tfce_score(t_stats, e, h, n, start_thres=1.65):
 
 def get_tfce_score_scipy(t_stats, e, h, n, start_thres=1.65):
     """
-    Transform the connectivity matrix using Threshold-Free Network-Oriented Statistics.
+    Transform the connectivity matrix using Threshold-Free Network-Oriented Statistics using Scipy module. 
 
     Parameters:
-        t_stats (np.ndarray): The statistic matrix (N x N).
-        e (float or list of float): Extent exponent(s).
-        h (float or list of float): Height exponent(s).
-        n (int): Number of steps for cluster formation.
-        start_thres (float) : Threshold value (a scalar) start for integration
-
+        t_stats (np.ndarray): Statistical matrix to be transformed of dimnesions (N, N)
+        e (float): Extent exponent (a scalar).
+        h (float): Height exponent (a scalar).
+        n (int): Number of thresholds steps between start_thres and max(t_stats).
+        start_thres (float): Inital threshold for cluster formation (default = 1.65)
+        
     Returns:
-        np.ndarray: Transformed TFNOS scores with shape (N, N, len(e_list)).
+        tfnos (np.ndarray): TFNOS score matrix of shape (N, N). 
 
+    >>>  t = np.array([[0, 2.1, 0.5],
+    ...               [2.1, 0, 2.5],
+    ...               [0.5, 2.5, 0]])
+    >>> np.round(get_tfce_score(t, e=0.5, h=2.0, n=10), 2)
+    array([[0.  , 8.48, 0.  ],
+           [8.48, 0.  , 8.48],
+           [0.  , 8.48, 0.  ]])
+    
+    Notes: This function uses scipy's csgraph module to compute connected components. 
     """
     if not np.all(np.diag(t_stats) == 0):
         raise ValueError("Diagonal elements of the connectivity matrix must be zero (no self-connections).")
