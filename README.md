@@ -17,7 +17,7 @@ massively reducing computation time and resources.
 
 Overview.png
 
-![Overview of TFNOS](Docs/TFNBS_Pipeline.png)
+![Overview of TFNOS](docs/TFNBS_Pipeline.png)
 
 ## Installation 
 TFNOS toolbox can be installed using: 
