@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>tfnbs.tfnos &#8212; TFNBS 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=12dfc556" />
+    <script src="_static/documentation_options.js?v=8d563738"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="tfnbs.nbs_utils" href="tfnbs.nbs_utils.html" />
+    <link rel="prev" title="TFNBS Modules" href="tfnbs.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-tfnbs.tfnos">
+<span id="tfnbs-tfnos"></span><h1>tfnbs.tfnos<a class="headerlink" href="#module-tfnbs.tfnos" title="Link to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="tfnbs.tfnos.get_tfce_score">
+<span class="sig-prename descclassname"><span class="pre">tfnbs.tfnos.</span></span><span class="sig-name descname"><span class="pre">get_tfce_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_stats</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_thres</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.65</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfnbs/tfnos.html#get_tfce_score"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfnbs.tfnos.get_tfce_score" title="Link to this definition">¶</a></dt>
+<dd><p>Function to transform the connectivity matrix using Threshold-Free Network-Oriented Statistics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t_stats</strong> (<em>np.ndarray</em>) – Statistical matrix to be transformed of dimnesions (N, N)</p></li>
+<li><p><strong>e</strong> (<em>float</em>) – Extent exponent (a scalar).</p></li>
+<li><p><strong>h</strong> (<em>float</em>) – Height exponent (a scalar).</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – Number of thresholds steps between start_thres and max(t_stats).</p></li>
+<li><p><strong>start_thres</strong> (<em>float</em>) – Inital threshold for cluster formation (default = 1.65)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>TFNOS score matrix of shape (N, N).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tfnos (np.ndarray)</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span> <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">2.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span>
+<span class="gp">... </span>              <span class="p">[</span><span class="mf">2.1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">],</span>
+<span class="gp">... </span>              <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">get_tfce_score</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">e</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">array([[0.  , 8.48, 0.  ],</span>
+<span class="go">       [8.48, 0.  , 8.48],</span>
+<span class="go">       [0.  , 8.48, 0.  ]])</span>
+</pre></div>
+</div>
+<p>Notes: This function uses networkx to compute connected components within the cluster.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tfnbs.tfnos.get_tfce_score_scipy">
+<span class="sig-prename descclassname"><span class="pre">tfnbs.tfnos.</span></span><span class="sig-name descname"><span class="pre">get_tfce_score_scipy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_stats</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_thres</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.65</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfnbs/tfnos.html#get_tfce_score_scipy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfnbs.tfnos.get_tfce_score_scipy" title="Link to this definition">¶</a></dt>
+<dd><p>Transform the connectivity matrix using Threshold-Free Network-Oriented Statistics using Scipy module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t_stats</strong> (<em>np.ndarray</em>) – Statistical matrix to be transformed of dimnesions (N, N)</p></li>
+<li><p><strong>e</strong> (<em>float</em>) – Extent exponent (a scalar).</p></li>
+<li><p><strong>h</strong> (<em>float</em>) – Height exponent (a scalar).</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – Number of thresholds steps between start_thres and max(t_stats).</p></li>
+<li><p><strong>start_thres</strong> (<em>float</em>) – Inital threshold for cluster formation (default = 1.65)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>TFNOS score matrix of shape (N, N).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tfnos (np.ndarray)</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span> <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">2.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span>
+<span class="gp">... </span>              <span class="p">[</span><span class="mf">2.1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">],</span>
+<span class="gp">... </span>              <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">get_tfce_score</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">e</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">array([[0.  , 8.48, 0.  ],</span>
+<span class="go">       [8.48, 0.  , 8.48],</span>
+<span class="go">       [0.  , 8.48, 0.  ]])</span>
+</pre></div>
+</div>
+<p>Notes: This function uses scipy’s csgraph module to compute connected components.</p>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">TFNBS</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tfnbs.html">TFNBS Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="tfnbs.html">TFNBS Modules</a><ul>
+      <li>Previous: <a href="tfnbs.html" title="previous chapter">TFNBS Modules</a></li>
+      <li>Next: <a href="tfnbs.nbs_utils.html" title="next chapter">tfnbs.nbs_utils</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, IHB RAS.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.4.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="_sources/tfnbs.tfnos.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
