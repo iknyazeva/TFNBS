@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>tfnbs.eeg_utils &#8212; TFNBS 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=12dfc556" />
+    <script src="_static/documentation_options.js?v=8d563738"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="tfnbs.pairwise_tfns" href="tfnbs.pairwise_tfns.html" />
+    <link rel="prev" title="tfnbs.nbs_utils" href="tfnbs.nbs_utils.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-tfnbs.eeg_utils">
+<span id="tfnbs-eeg-utils"></span><h1>tfnbs.eeg_utils<a class="headerlink" href="#module-tfnbs.eeg_utils" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.Bands">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tfnbs.eeg_utils.</span></span><span class="sig-name descname"><span class="pre">Bands</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfnbs/eeg_utils.html#Bands"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfnbs.eeg_utils.Bands" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>Class to return EEG frequency bands with respective IDs.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Bands</span><span class="o">.</span><span class="n">alpha1</span><span class="o">.</span><span class="n">value</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Bands</span><span class="o">.</span><span class="n">get_name_by_id</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+<span class="go">&#39;beta2&#39;</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.Bands.alpha1">
+<span class="sig-name descname"><span class="pre">alpha1</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#tfnbs.eeg_utils.Bands.alpha1" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.Bands.alpha2">
+<span class="sig-name descname"><span class="pre">alpha2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#tfnbs.eeg_utils.Bands.alpha2" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.Bands.beta1">
+<span class="sig-name descname"><span class="pre">beta1</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#tfnbs.eeg_utils.Bands.beta1" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.Bands.beta2">
+<span class="sig-name descname"><span class="pre">beta2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#tfnbs.eeg_utils.Bands.beta2" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.Bands.delta">
+<span class="sig-name descname"><span class="pre">delta</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#tfnbs.eeg_utils.Bands.delta" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.Bands.gamma">
+<span class="sig-name descname"><span class="pre">gamma</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">7</span></em><a class="headerlink" href="#tfnbs.eeg_utils.Bands.gamma" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.Bands.get_name_by_id">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_name_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfnbs/eeg_utils.html#Bands.get_name_by_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfnbs.eeg_utils.Bands.get_name_by_id" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.Bands.get_values">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfnbs/eeg_utils.html#Bands.get_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfnbs.eeg_utils.Bands.get_values" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.Bands.theta">
+<span class="sig-name descname"><span class="pre">theta</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#tfnbs.eeg_utils.Bands.theta" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.EEGData">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tfnbs.eeg_utils.</span></span><span class="sig-name descname"><span class="pre">EEGData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">electrodes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">el_pairs_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bands</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfnbs/eeg_utils.html#EEGData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfnbs.eeg_utils.EEGData" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class function for reading EEG data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>np.ndarray</em>) – EEG data of shape (n_subjects, n_channels, num_freqs).</p></li>
+<li><p><strong>subj_list</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – List of subject identifiers corresponding to the first axis of ‘data’.</p></li>
+<li><p><strong>electrodes</strong> (<em>Enum</em>) – Enum represents electrodes.</p></li>
+<li><p><strong>el_pairs_list</strong> (<em>List</em><em>[</em><em>Tuple</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>]</em>) – List of electrode pairs.</p></li>
+<li><p><strong>bands</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – List of EEG frequency bands.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.Electrodes">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tfnbs.eeg_utils.</span></span><span class="sig-name descname"><span class="pre">Electrodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfnbs/eeg_utils.html#Electrodes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfnbs.eeg_utils.Electrodes" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>Class to return EEG electrode names and respective IDs based on 10-20 EEG system.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Electrodes</span><span class="o">.</span><span class="n">Fp2</span><span class="o">.</span><span class="n">value</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Electrodes</span><span class="o">.</span><span class="n">P3</span><span class="o">.</span><span class="n">name</span>
+<span class="go">&#39;P3&#39;</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.Electrodes.C3">
+<span class="sig-name descname"><span class="pre">C3</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">14</span></em><a class="headerlink" href="#tfnbs.eeg_utils.Electrodes.C3" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.Electrodes.C4">
+<span class="sig-name descname"><span class="pre">C4</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">16</span></em><a class="headerlink" href="#tfnbs.eeg_utils.Electrodes.C4" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.Electrodes.Cz">
+<span class="sig-name descname"><span class="pre">Cz</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">15</span></em><a class="headerlink" href="#tfnbs.eeg_utils.Electrodes.Cz" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.Electrodes.F3">
+<span class="sig-name descname"><span class="pre">F3</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#tfnbs.eeg_utils.Electrodes.F3" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.Electrodes.F4">
+<span class="sig-name descname"><span class="pre">F4</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#tfnbs.eeg_utils.Electrodes.F4" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.Electrodes.F7">
+<span class="sig-name descname"><span class="pre">F7</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#tfnbs.eeg_utils.Electrodes.F7" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.Electrodes.F8">
+<span class="sig-name descname"><span class="pre">F8</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">7</span></em><a class="headerlink" href="#tfnbs.eeg_utils.Electrodes.F8" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.Electrodes.Fp1">
+<span class="sig-name descname"><span class="pre">Fp1</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#tfnbs.eeg_utils.Electrodes.Fp1" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.Electrodes.Fp2">
+<span class="sig-name descname"><span class="pre">Fp2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#tfnbs.eeg_utils.Electrodes.Fp2" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.Electrodes.Fz">
+<span class="sig-name descname"><span class="pre">Fz</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#tfnbs.eeg_utils.Electrodes.Fz" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.Electrodes.O1">
+<span class="sig-name descname"><span class="pre">O1</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">12</span></em><a class="headerlink" href="#tfnbs.eeg_utils.Electrodes.O1" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.Electrodes.O2">
+<span class="sig-name descname"><span class="pre">O2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">13</span></em><a class="headerlink" href="#tfnbs.eeg_utils.Electrodes.O2" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.Electrodes.P3">
+<span class="sig-name descname"><span class="pre">P3</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">17</span></em><a class="headerlink" href="#tfnbs.eeg_utils.Electrodes.P3" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.Electrodes.P4">
+<span class="sig-name descname"><span class="pre">P4</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">19</span></em><a class="headerlink" href="#tfnbs.eeg_utils.Electrodes.P4" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.Electrodes.Pz">
+<span class="sig-name descname"><span class="pre">Pz</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">18</span></em><a class="headerlink" href="#tfnbs.eeg_utils.Electrodes.Pz" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.Electrodes.T3">
+<span class="sig-name descname"><span class="pre">T3</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">8</span></em><a class="headerlink" href="#tfnbs.eeg_utils.Electrodes.T3" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.Electrodes.T4">
+<span class="sig-name descname"><span class="pre">T4</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">9</span></em><a class="headerlink" href="#tfnbs.eeg_utils.Electrodes.T4" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.Electrodes.T5">
+<span class="sig-name descname"><span class="pre">T5</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#tfnbs.eeg_utils.Electrodes.T5" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.Electrodes.T6">
+<span class="sig-name descname"><span class="pre">T6</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">11</span></em><a class="headerlink" href="#tfnbs.eeg_utils.Electrodes.T6" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.PairsElectrodes1020">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tfnbs.eeg_utils.</span></span><span class="sig-name descname"><span class="pre">PairsElectrodes1020</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">electrodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#tfnbs.eeg_utils.Electrodes" title="tfnbs.eeg_utils.Electrodes"><span class="pre">Electrodes</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfnbs/eeg_utils.html#PairsElectrodes1020"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfnbs.eeg_utils.PairsElectrodes1020" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class to resolve &amp; return electrode pairs based on 10-20 EEG system.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.PairsElectrodes1020.electrode_pairs">
+<span class="sig-name descname"><span class="pre">electrode_pairs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tfnbs.eeg_utils.PairsElectrodes1020.electrode_pairs" title="Link to this definition">¶</a></dt>
+<dd><p>Function to resolve indexed electrode names.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.PairsElectrodes1020.create_pairs_dict">
+<span class="sig-name descname"><span class="pre">create_pairs_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfnbs/eeg_utils.html#PairsElectrodes1020.create_pairs_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfnbs.eeg_utils.PairsElectrodes1020.create_pairs_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Function to create mapped dictionary of electodes with pairs.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.PairsElectrodes1020.electrodes">
+<span class="sig-name descname"><span class="pre">electrodes</span></span><a class="headerlink" href="#tfnbs.eeg_utils.PairsElectrodes1020.electrodes" title="Link to this definition">¶</a></dt>
+<dd><p>List of electrodes to consider</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference internal" href="#tfnbs.eeg_utils.Electrodes" title="tfnbs.eeg_utils.Electrodes">Electrodes</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.PairsElectrodes1020.nearest">
+<span class="sig-name descname"><span class="pre">nearest</span></span><a class="headerlink" href="#tfnbs.eeg_utils.PairsElectrodes1020.nearest" title="Link to this definition">¶</a></dt>
+<dd><p>List of electrode pairs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[Tuple[str, str]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">electrodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">Electrodes</span><span class="o">.</span><span class="n">Fp1</span><span class="p">,</span> <span class="n">Electrodes</span><span class="o">.</span><span class="n">Fp2</span><span class="p">,</span> <span class="n">Electrodes</span><span class="o">.</span><span class="n">Fz</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pairs_obj</span> <span class="o">=</span> <span class="n">PairsElectrodes1020</span><span class="p">(</span><span class="n">electrodes</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pairs_obj</span><span class="o">.</span><span class="n">electrode_pairs</span>
+<span class="go">[(&#39;Fp1&#39;, &#39;Fp2&#39;), (&#39;Fp1&#39;, &#39;Fz&#39;), (&#39;Fp2&#39;, &#39;Fz&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pairs_dict</span> <span class="o">=</span> <span class="n">pairs_obj</span><span class="o">.</span><span class="n">create_pairs_dict</span><span class="p">(</span><span class="n">pairs_obj</span><span class="o">.</span><span class="n">nearest</span><span class="p">,</span> <span class="n">filter_by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Fp1&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="s1">&#39;Fp1&#39;</span><span class="p">,</span> <span class="s1">&#39;Fp2&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">pairs_dict</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">create_pairs_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pairs_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfnbs/eeg_utils.html#PairsElectrodes1020.create_pairs_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Link to this definition">¶</a></dt>
+<dd><p>Creates a dictionary mapping electrode pairs to pairs_list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pairs_list</strong> (<em>list</em>) – List of electrode pairs (tuple) to be mapped.</p></li>
+<li><p><strong>filter_by</strong> (<em>list</em><em>, </em><em>optional</em>) – List of electrodes to be filtered by name (Default = None).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>pairs_dict (dict) = Dictionary with electrode pairs as keys (from self.electrode) mapped to</dt><dd><p>electrodes from pairs_list.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">electrodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">Electrodes</span><span class="o">.</span><span class="n">Fp1</span><span class="p">,</span> <span class="n">Electrodes</span><span class="o">.</span><span class="n">Fp2</span><span class="p">,</span> <span class="n">Electrodes</span><span class="o">.</span><span class="n">Fz</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pairs_obj</span> <span class="o">=</span> <span class="n">PairsElectrodes1020</span><span class="p">(</span><span class="n">electrodes</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pairs_obj</span><span class="o">.</span><span class="n">electrode_pairs</span>
+<span class="go">[(&#39;Fp1&#39;, &#39;Fp2&#39;), (&#39;Fp1&#39;, &#39;Fz&#39;), (&#39;Fp2&#39;, &#39;Fz&#39;)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id1">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">electrode_pairs</span></span><a class="headerlink" href="#id1" title="Link to this definition">¶</a></dt>
+<dd><p>Returns electrode names as an indexed list as per combinations</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">electrodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">Electrodes</span><span class="o">.</span><span class="n">Fp1</span><span class="p">,</span> <span class="n">Electrodes</span><span class="o">.</span><span class="n">Fp2</span><span class="p">,</span> <span class="n">Electrodes</span><span class="o">.</span><span class="n">Fz</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pairs_obj</span> <span class="o">=</span> <span class="n">PairsElectrodes1020</span><span class="p">(</span><span class="n">electrodes</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pairs_obj</span><span class="o">.</span><span class="n">electrode_pairs</span>
+<span class="go">[(&#39;Fp1&#39;, &#39;Fp2&#39;), (&#39;Fp1&#39;, &#39;Fz&#39;), (&#39;Fp2&#39;, &#39;Fz&#39;)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.inverse_reshape_eeg_data">
+<span class="sig-prename descclassname"><span class="pre">tfnbs.eeg_utils.</span></span><span class="sig-name descname"><span class="pre">inverse_reshape_eeg_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reshaped_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reshape_bands</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/tfnbs/eeg_utils.html#inverse_reshape_eeg_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfnbs.eeg_utils.inverse_reshape_eeg_data" title="Link to this definition">¶</a></dt>
+<dd><p>Function to perform Inverse reshape of EEG data back to (n_subjects, chan_pairs, num_freqs) format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reshaped_data</strong> (<em>np.ndarray</em>) – EEG data of shape (n_subjects, num_els, num_els, num_freqs).</p></li>
+<li><p><strong>or</strong> (<em>n_subjects</em><em>, </em><em>num_els*n_freqs</em><em>, </em><em>num_els*n_freqs</em>)</p></li>
+<li><p><strong>reshape_bands</strong> (<em>bool</em>) – To indicate if input is in band-flattened form.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Original EEG data of shape (n_subjects, chan_pairs, num_freqs) or (chan_pairs, num_freq)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>original_data (np.ndarray)</p>
+</dd>
+</dl>
+<p># &gt;&gt;&gt; from tfnbs.eeg_utils import reshape_eeg_data
+&gt;&gt;&gt; n_pairs = np.random.rand(2, len(PairsElectrodes1020(Electrodes).electrode_pairs), 3)
+&gt;&gt;&gt; reshaped_data = eshape_eeg_data(n_pairs, reshape_bands=True)
+&gt;&gt;&gt; reshaped_data.shape
+(2, 57, 57)
+&gt;&gt;&gt; inverse_data = inverse_reshape_eeg_data(reshaped_data, reshape_bands=True)
+&gt;&gt;&gt; inverse_data.shape
+(2, 171, 3)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.read_from_eeg_dataframe">
+<span class="sig-prename descclassname"><span class="pre">tfnbs.eeg_utils.</span></span><span class="sig-name descname"><span class="pre">read_from_eeg_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_to_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cond_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fo'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">band_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfnbs/eeg_utils.html#read_from_eeg_dataframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfnbs.eeg_utils.read_from_eeg_dataframe" title="Link to this definition">¶</a></dt>
+<dd><p>Function to read EEG data from (.csv) format &amp; load into (n_subjects, n_channels, num_freqs) format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path_to_df</strong> (<em>str</em>) – Path to csv file with EEG data.</p></li>
+<li><p><strong>cond_prefix</strong> (<em>str</em><em>, </em><em>optional</em>) – String prefix for identification of condition w.r.t columns (default = ‘fo’).</p></li>
+<li><p><strong>band_list</strong> (<em>list</em><em>[</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – List of frequency bands (default = None).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>data (np.ndarray): EEG data array of shape (n_subjects, n_channels, n_freqs)
+subj_list (List[str]): List of subject identifiers corresponding to the first axis of ‘data’.
+Electrodes (Enum): Returned as electrode class for channels with labels.
+(pairs_dict.keys()) (tuple): Electrode pairs as a tuple.
+bands (Enum): Returned as Bands class of frequency bands.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>EEGData object with attributes</p>
+</dd>
+</dl>
+<p># ‘..datasetseeg_dataframe_nansfilled.csv’
+&gt;&gt;&gt; eeg_data = read_from_eeg_dataframe(‘datasetseeg_dataframe_nansfilled.csv’, cond_prefix=’fo’)
+&gt;&gt;&gt; eeg_data.data.shape
+(177, 171, 7)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tfnbs.eeg_utils.reshape_eeg_data">
+<span class="sig-prename descclassname"><span class="pre">tfnbs.eeg_utils.</span></span><span class="sig-name descname"><span class="pre">reshape_eeg_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reshape_bands</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/tfnbs/eeg_utils.html#reshape_eeg_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfnbs.eeg_utils.reshape_eeg_data" title="Link to this definition">¶</a></dt>
+<dd><p>Reshape EEG data from (n_subjects, chan_pairs, num_freqs) or (chan_pairs, chan_pairs) to
+(n_subjects, n_chans, n_chans, n_freq) or to (n_subjects, n_chans*n_freq, n_chans*n_freq,) if reshape_bands is True,
+where each chansxchans block corresponds to a specific frequency. The number of electrode pairs is considered as 19,
+for this instance of implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>np.ndarray</em>) – Array of shape (n_subjects, chan_pairs, num_freqs)</p></li>
+<li><p><strong>reshape_bands</strong> (<em>bool</em>) – Option to return a block diagonal matrix where each block returned as per individual frequency bands (default = True)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Array of shape (n_subjects,  chan_pairs, num_freqs) or  (n_subjects, n_chans*n_freq, n_chans*n_freq,)
+For single subjects = reshaped_data: [np.ndarray] of shape (chan_pairs, chan_pairs, num_freqs) or (chan_pairs*num_freqs, chan_pairs*num_freqs)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>reshaped_data (np.ndarray)</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n_pairs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">PairsElectrodes1020</span><span class="p">(</span><span class="n">Electrodes</span><span class="p">)</span><span class="o">.</span><span class="n">electrode_pairs</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>  <span class="c1"># 1 subject, all pairs, 2 freqs/len(PairsElectrodes1020(Electrodes).electrode_pairs)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">reshape_eeg_data</span><span class="p">(</span><span class="n">n_pairs</span><span class="p">,</span> <span class="n">reshape_bands</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(2, 19, 19, 3)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">reshape_eeg_data</span><span class="p">(</span><span class="n">n_pairs</span><span class="p">,</span> <span class="n">reshape_bands</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(2, 57, 57)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">TFNBS</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tfnbs.html">TFNBS Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="tfnbs.html">TFNBS Modules</a><ul>
+      <li>Previous: <a href="tfnbs.nbs_utils.html" title="previous chapter">tfnbs.nbs_utils</a></li>
+      <li>Next: <a href="tfnbs.pairwise_tfns.html" title="next chapter">tfnbs.pairwise_tfns</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, IHB RAS.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.4.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="_sources/tfnbs.eeg_utils.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
