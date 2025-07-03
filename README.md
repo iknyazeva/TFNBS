@@ -4,7 +4,7 @@
 ``TFNBS`` 
 
 <!--- [pypi version] -->
-[license]https://img.shields.io/github/license/:user/TFNBS?color=darkgreen
+[license]https://img.shields.io/github/license/iknyazeva/TFNBS?color=darkgreen
 [size]https://img.shields.io/github/repo-size/iknyazeva/tfnbs
 
 
