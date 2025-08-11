@@ -1,5 +1,5 @@
 tfnbs.datasets
-===================
+==============
 
 .. automodule:: tfnbs.datasets
    :members:

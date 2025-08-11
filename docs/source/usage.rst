@@ -1,5 +1,5 @@
 Usage
-===========
+=====
 
 This toolbox presents a Python implementation to use the TFNBS for fMRI and EEG functional connectivity data with the 
 flexibility to use structured data (i.e. block diagonal matrices) corresponding to frequency range and connectivity matrix. 

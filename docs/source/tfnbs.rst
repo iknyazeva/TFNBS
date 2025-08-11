@@ -1,23 +1,15 @@
-TFNBS Modules
-==================
+tfnbs
+=====
 
-Sub-modules
------------
+Submodules
+----------
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 1
 
-   tfnbs.tfnos
-   tfnbs.nbs_utils
-   tfnbs.eeg_utils
-   tfnbs.pairwise_tfns
    tfnbs.datasets
-   tfnbs.utils   
-
-Module contents
----------------
-
-.. automodule:: tfnbs
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   tfnbs.nbs_utils
+   tfnbs.utils
+   tfnbs.pairwise_tfns
+   tfnbs.tfnos
+   tfnbs.eeg_utils

@@ -197,7 +197,6 @@ def read_from_eeg_dataframe(path_to_df,
             (pairs_dict.keys()) (tuple): Electrode pairs as a tuple. 
             bands (Enum): Returned as Bands class of frequency bands.
 
-    # '..\datasets\eeg_dataframe_nansfilled.csv'
     >>> eeg_data = read_from_eeg_dataframe('datasets\eeg_dataframe_nansfilled.csv', cond_prefix='fo')
     >>> eeg_data.data.shape
     (177, 171, 7)
@@ -288,9 +287,8 @@ def inverse_reshape_eeg_data(
         Returns:
             original_data (np.ndarray): Original EEG data of shape (n_subjects, chan_pairs, num_freqs) or (chan_pairs, num_freq)
 
-        # >>> from tfnbs.eeg_utils import reshape_eeg_data
         >>> n_pairs = np.random.rand(2, len(PairsElectrodes1020(Electrodes).electrode_pairs), 3)
-        >>> reshaped_data = eshape_eeg_data(n_pairs, reshape_bands=True)
+        >>> reshaped_data = reshape_eeg_data(n_pairs, reshape_bands=True)
         >>> reshaped_data.shape 
         (2, 57, 57)
         >>> inverse_data = inverse_reshape_eeg_data(reshaped_data, reshape_bands=True)

@@ -34,12 +34,13 @@ def compute_p_val(group1: npt.NDArray[np.float64],
             - 'g1>g2': P-values for group 1 > group 2.
             - 'g2>g1': P-values for group 2 > group 1.
 
-    >>> group1 = np.random.rand(5, 3, 3); for arr in group1: np.fill_diagonal(arr,1)
-    >>> group2 = np.random.rand(8, 3, 3); for arr in group2: np.fill_diagonal(arr,1)
+    >>> group1 = np.random.rand(5, 3, 3); 
+    >>> for arr in group1:  np.fill_diagonal(arr,1)
+    >>> group2 = np.random.rand(8, 3, 3); 
+    >>> for arr in group2:  np.fill_diagonal(arr,1);
     >>> p_vals = compute_p_val(group1, group2, n_permutations=10, paired=False, tf=False, random_state = 0)
     >>> p_vals['g2>g1'].mean() < p_vals['g1>g2'].mean() 
     True
-    
     """
     if paired is True:
         t_func = compute_t_stat_tfnos_diffs if tf else compute_t_stat_diff
@@ -179,7 +180,6 @@ def compute_null_dist(group1: npt.NDArray[np.float64],
     >>> null_d = compute_null_dist(group1, group2, compute_t_stat)
     >>> isinstance(null_d, dict)
     True
-
     """
     # Validate inputs
     if group1.shape[1:] != group2.shape[1:]:
@@ -217,7 +217,7 @@ def compute_null_dist(group1: npt.NDArray[np.float64],
         t_maxes_dict = {key: np.empty((n_permutations, *output_shape), dtype=np.float64) for key in group_keys}
         #t_maxes = np.empty(n_permutations, dtype=np.float64)
         for i, seed in enumerate(seeds[1:]):
-            print(f"  Permutation {i + 1} of {n_permutations}")
+            #print(f"  Permutation {i + 1} of {n_permutations}")
             if paired:
                 perm_dict = _permutation_task_paired(array_to_permute, func, seed, **func_kwargs)
                 for k, v in t_maxes_dict.items():
@@ -288,7 +288,6 @@ def compute_permute_t_stat_ind(group1: npt.NDArray[np.float64],
     True
     >>> perm_t_neg >1
     True
-
     """
     # Validate input shapes
     if group1.shape[1:] != group2.shape[1:]:
@@ -327,10 +326,11 @@ def compute_permute_t_stat_diff(diffs: npt.NDArray) -> tuple[float, float]:
             - 'g1>g2': Maximum t-statistics for group 1 > group 2.
             - 'g2>g1': Maximum t-statistics for group 2 > group 1.
     
+    >>> np.random.seed(42)
     >>> group1 = np.random.rand(5, 3, 3)
     >>> group2 = np.random.rand(5, 3, 3)
     >>> diffs = group2 - group1
-    >>> perm_t_pos, perm_t_neg = compute_permute_t_stat_ind(diffs)
+    >>> perm_t_pos, perm_t_neg = compute_permute_t_stat_diff(diffs)
     >>> perm_t_pos > 1
     True
     >>> perm_t_neg > 1
@@ -371,14 +371,12 @@ def compute_t_stat_tfnos(group1: npt.NDArray[np.float64],
 
     >>> np.random.seed(2)
     >>> group1 = np.random.rand(5, 3, 3); group2 = np.random.rand(5, 3, 3)
-    >>> for i in range(group1.shape[0]):
-    >>>     np.fill_diagonal(group1[i], 0)
-    >>>     np.fill_diagonal(group2[i], 0)
+    >>> for i in range(group1.shape[0]): np.fill_diagonal(group1[i], 0); np.fill_diagonal(group2[i], 0);
     >>> t_stat_dict = compute_t_stat(group1, group2, False)
     >>> results = get_tfce_score_scipy(t_stat_dict["g1>g2"], 0.4, 3, 10)
     >>> upper_vals = results.reshape(3, 3)[np.triu_indices(3, k=1)]
-    >>> round(upper_vals.mean(), 6) < N
-    True        
+    >>> round(upper_vals.mean(), 6) < 1
+    True    
     """
     t_stat_dict = compute_t_stat(group1, group2, paired=paired)
     score_pos = get_tfce_score_scipy(t_stat_dict["g2>g1"], e, h, n)
@@ -411,15 +409,12 @@ def compute_t_stat_tfnos_diffs(diffs: npt.NDArray[np.float64],
 
     >>> np.random.seed(2)
     >>> group1 = np.random.rand(5, 3, 3); group2 = np.random.rand(5, 3, 3)
-    >>> for i in range(group1.shape[0]):
-    >>>     np.fill_diagonal(group1[i], 0)
-    >>>     np.fill_diagonal(group2[i], 0)
+    >>> for i in range(group1.shape[0]): np.fill_diagonal(group1[i], 0);  np.fill_diagonal(group2[i], 0);
     >>> diff = group1-group2
     >>> result = compute_t_stat_tfnos_diffs(diff, e=0.4, h=3, n=10, start_thres=1.65)
     >>> upper_vals = result["g1>g2"].reshape(3, 3)[np.triu_indices(3, k=1)]
-    >>> round(upper_vals.mean(), 6) < N
+    >>> round(upper_vals.mean(), 6) < 1
     True
-
     """
     t_stat_dict = compute_t_stat_diff(diffs)
     score_pos = get_tfce_score_scipy(t_stat_dict["g2>g1"], e, h, n, start_thres=start_thres)
@@ -449,12 +444,11 @@ def compute_t_stat(group1: npt.NDArray[np.float64],
         ValueError: If shapes are incompatible or sample sizes don't match for paired test.
 
 
-    >>> group_1 = np.array([[0, 2, 1], [3, 0, 1], [2, 2, 0]])
-    >>> group_2 = np.array([[0, 1, 3], [1, 0, 1], [3, 1, 0]])
+    >>> group1 = np.array([[0, 2, 1], [3, 0, 1], [2, 2, 0]])
+    >>> group2 = np.array([[0, 1, 3], [1, 0, 1], [3, 1, 0]])
     >>> result = compute_t_stat(group1, group2, paired = True)
-    >>> result['g2>g1'].shape[0] ==  group_1.shape[0]
+    >>> result['g2>g1'].shape[0] ==  group1.shape[0]
     True
-
     """
     # Validate input shapes
     if group1.shape[1:] != group2.shape[1:]:
@@ -506,8 +500,8 @@ def compute_t_stat_diff(diff: npt.NDArray[np.float64]) -> Dict[str, npt.NDArray[
     Notes:
         Uses sample standard deviation with ddof=1 for unbiased variance estimation.
 
-    >>> group_1 = np.array([[0, 2, 1], [3, 0, 1], [2, 2, 0]])
-    >>> group_2 = np.array([[0, 1, 3], [1, 0, 1], [3, 1, 0]])
+    >>> group1 = np.array([[0, 2, 1], [3, 0, 1], [2, 2, 0]])
+    >>> group2 = np.array([[0, 1, 3], [1, 0, 1], [3, 1, 0]])
     >>> result = compute_t_stat_diff(compute_diffs(group1, group2))
     >>> result['g2>g1'].shape[0] == group1.shape[0]
     True

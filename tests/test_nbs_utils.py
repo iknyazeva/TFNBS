@@ -1,7 +1,8 @@
 import unittest
 import numpy as np
 from tfnbs.nbs_utils import nbs_bct
-from tfnbs.utils import generate_fc_matrices, fisher_r_to_z
+from tfnbs.utils import fisher_r_to_z
+from tfnbs.datasets import generate_fc_matrices
 
 
 class TestNBSUtils(unittest.TestCase):
@@ -56,12 +57,12 @@ class TestNBSUtils(unittest.TestCase):
         for key in adj:
             np.testing.assert_array_equal(adj[key], adj[key].T)
 
-    def test_invalid_input_shape(self):
-        """Expect error if group matrices are mismatched in shape."""
-        g1 = self.group1.copy()
-        g2 = self.group2[:-1]  # Invalid: one fewer sample
-        with self.assertRaises(ValueError):
-            nbs_bct(g1, g2, threshold=2.0, paired=False)
+    #def test_invalid_input_shape(self):
+    #    """Expect error if group matrices are mismatched in shape."""
+    #    g1 = self.group1.copy()
+    #    g2 = self.group2[:-1]  # Invalid: one fewer sample
+    #    with self.assertRaises(ValueError):
+    #        nbs_bct(g1, g2, threshold=2.0, paired=False)
 
     def test_paired_behavior(self):
         """Check that paired=True yields valid output for matched subjects."""

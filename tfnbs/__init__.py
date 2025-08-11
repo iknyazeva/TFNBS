@@ -1,3 +1,5 @@
+__version__ = "1.0.0"
+
 from .datasets import generate_fc_matrices
 
 from .eeg_utils import (

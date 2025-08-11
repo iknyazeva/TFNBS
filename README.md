@@ -4,9 +4,11 @@
 ``TFNBS`` 
 
 <!--- [pypi version] -->
-[license]https://img.shields.io/github/license/iknyazeva/TFNBS?color=darkgreen
-[size]https://img.shields.io/github/repo-size/iknyazeva/tfnbs
-
+![size](https://img.shields.io/github/repo-size/maddoxx02/TFNBS_Temp)
+![license](https://img.shields.io/github/license/maddoxx02/TFNBS_temp)
+![release](https://img.shields.io/github/v/release/maddoxx02/TFNBS_temp)
+![last-commit](https://img.shields.io/github/last-commit/maddoxx02/TFNBS_temp)
+![TFNBS_temp](https://img.shields.io/github/downloads/maddoxx02/TFNBS_temp/total)
 
 TFNBS Toolbox is a Python package for computation and generation of network-based statistics for neuroscience data 
 (i.e. fMRI, EEG data). The core concept is based on eliminating the use of a hardcoded threshold using threshold-free 
@@ -17,7 +19,7 @@ massively reducing computation time and resources.
 
 Overview.png
 
-![Overview of TFNOS](docs/TFNBS_Pipeline.png)
+![Overview of TFNOS](docs/Figure_Overview.png)
 
 ## Installation 
 TFNOS toolbox can be installed using: 
@@ -28,7 +30,7 @@ TFNOS toolbox can be installed using:
 
 ## Documentation
 
-For more information on TFNBS's features, modules and usage, please refer to the [official documentation](). 
+For more information on TFNBS's features, modules and usage, please refer to the [official documentation](https://maddoxx02.github.io/TFNBS_Temp/). 
 
 Examples of usage on fMRI and EEG data are avaialble in [notebooks]() and [data](). 
 
@@ -40,3 +42,8 @@ To cite the toolbox, you can use: [doi]() and refer to the paper [paper_doi]()
 ```
 
 For further discussions or reports on bugs, please contact [test@email.com]()
+
+
+
+
+

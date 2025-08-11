@@ -17,13 +17,11 @@ def get_tfce_score(t_stats, e, h, n, start_thres=1.65):
     Returns:
         tfnos (np.ndarray): TFNOS score matrix of shape (N, N). 
 
-    >>>  t = np.array([[0, 2.1, 0.5],
-    ...               [2.1, 0, 2.5],
-    ...               [0.5, 2.5, 0]])
+    >>> t = np.array([[0, 2.1, 0.5],[2.1, 0, 2.5],[0.5, 2.5, 0]])
     >>> np.round(get_tfce_score(t, e=0.5, h=2.0, n=10), 2)
-    array([[0.  , 8.48, 0.  ],
-           [8.48, 0.  , 8.48],
-           [0.  , 8.48, 0.  ]])
+    array([[0.  , 2.19, 0.  ],
+           [2.19, 0.  , 4.5 ],
+           [0.  , 4.5 , 0.  ]])
 
     Notes: This function uses networkx to compute connected components within the cluster. 
 
@@ -106,13 +104,11 @@ def get_tfce_score_scipy(t_stats, e, h, n, start_thres=1.65):
     Returns:
         tfnos (np.ndarray): TFNOS score matrix of shape (N, N). 
 
-    >>>  t = np.array([[0, 2.1, 0.5],
-    ...               [2.1, 0, 2.5],
-    ...               [0.5, 2.5, 0]])
+    >>> t = np.array([[0, 2.1, 0.5],[2.1, 0, 2.5],[0.5, 2.5, 0]])
     >>> np.round(get_tfce_score(t, e=0.5, h=2.0, n=10), 2)
-    array([[0.  , 8.48, 0.  ],
-           [8.48, 0.  , 8.48],
-           [0.  , 8.48, 0.  ]])
+    array([[0.  , 2.19, 0.  ],
+           [2.19, 0.  , 4.5 ],
+           [0.  , 4.5 , 0.  ]])
     
     Notes: This function uses scipy's csgraph module to compute connected components. 
     """

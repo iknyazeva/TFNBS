@@ -1,5 +1,5 @@
 Installation
-===================
+============
 
 To install **TFNBS**, you can follow the approaches below: 
 
@@ -16,7 +16,7 @@ To install **TFNBS**, you can follow the approaches below:
 
 .. code-block:: bash
 
-    git https://github.com/IHB-IBR-department/TFNBS.git
+    git clone https://github.com/IHB-IBR-department/TFNBS.git
 
 ---------------
 

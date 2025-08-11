@@ -10,7 +10,7 @@ class TesteegUtils(TestCase):
         data = np.random.randn(20, 171, 7)
         subj_list = [f'sub_{i}' for i in range(20)]
         pairs = PairsElectrodes1020(Electrodes)
-        self.path_to_df = 'tests/eeg_dataframe_nansfilled.csv'
+        self.path_to_df = 'datasets\eeg_dataframe_nansfilled.csv'
 
     def test_read_from_eeg_dataframe(self):
         stable_fo = eeg_utils.read_from_eeg_dataframe(self.path_to_df, cond_prefix='fo')
