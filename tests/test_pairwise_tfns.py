@@ -13,8 +13,6 @@ from tfnbs.pairwise_tfns import (_permutation_task_ind,
                                  compute_t_stat_tfnos_diffs)
 
 from tfnbs.datasets import generate_fc_matrices
-from tfnbs.datasets import (create_simple_random,
-                            create_nd_random_arr)
 import numpy as np
 
 
@@ -266,7 +264,7 @@ class TestRealExample(TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         from scipy.io import loadmat
-        path_to_data = '../examples/02_BLOCK_VAR_HRF_SNR05_CORRDIFF/'
+        path_to_data = '../datasets/02_BLOCK_VAR_HRF_SNR05_CORRDIFF/'
         taskB = loadmat(path_to_data + 'Task_B.mat')['corrdiff_TaskB']
         taskA = loadmat(path_to_data + 'Task_A.mat')['corrdiff_TaskA']
         taskB = fisher_r_to_z(np.nan_to_num(taskB, posinf=0, neginf=0))
